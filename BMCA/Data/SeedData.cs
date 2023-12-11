@@ -18,12 +18,18 @@ namespace BMCA.Data
             }
 
             string _GUID_Admin_Role = Guid.NewGuid().ToString();
+            string _GUID_Moderator_Role = Guid.NewGuid().ToString();
+            string _GUID_User_Role = Guid.NewGuid().ToString();
+            string _GUID_Guest_Role = Guid.NewGuid().ToString();
 
             string _GUID_Admin = Guid.NewGuid().ToString();
 
             _Context.Roles.AddRange
             (
-                new IdentityRole { Id = _GUID_Admin_Role, Name = "Admin", NormalizedName = "ADMIN" }
+                new IdentityRole { Id = _GUID_Admin_Role, Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { Id = _GUID_Moderator_Role, Name = "Moderator", NormalizedName = "MODERATOR" },
+                new IdentityRole { Id = _GUID_User_Role, Name = "User", NormalizedName = "USER" },
+                new IdentityRole { Id = _GUID_Guest_Role, Name = "Guest", NormalizedName = "GUEST" }
             );
 
             var _Hasher = new PasswordHasher<ApplicationUser>();
