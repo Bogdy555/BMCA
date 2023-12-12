@@ -13,7 +13,8 @@ namespace BMCA.Data.Migrations
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,7 +64,8 @@ namespace BMCA.Data.Migrations
                 columns: table => new
                 {
                     ChannelId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsOwner = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

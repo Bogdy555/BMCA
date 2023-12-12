@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BMCA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231212151852_InitialMigration")]
+    [Migration("20231212185819_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,6 +112,9 @@ namespace BMCA.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsOwner")
+                        .HasColumnType("bit");
+
                     b.HasKey("ChannelId", "UserId");
 
                     b.HasIndex("UserId");
@@ -126,6 +129,11 @@ namespace BMCA.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ID");
 

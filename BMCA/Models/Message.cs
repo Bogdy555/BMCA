@@ -15,6 +15,9 @@ namespace BMCA.Models
         public string Content { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public string UserId { get; set; }
 
         [Required]

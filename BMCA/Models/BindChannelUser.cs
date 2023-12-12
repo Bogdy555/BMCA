@@ -9,7 +9,7 @@ namespace BMCA.Models
     {
 
         [Required]
-        bool IsOwner;
+        public bool IsOwner { get; set; }
 
         public int ChannelId { get; set; }
 
