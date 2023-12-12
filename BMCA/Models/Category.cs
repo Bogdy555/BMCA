@@ -14,6 +14,8 @@ namespace BMCA.Models
         [StringLength(50, ErrorMessage = "Name must contain at most 50 characters!")]
         public string Name;
 
+        public virtual ICollection<BindChannelCategory> BindChannelCategory { get; set; }
+
     }
 
 }

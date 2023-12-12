@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BMCA.Models
@@ -20,9 +21,9 @@ namespace BMCA.Models
         [StringLength(200, ErrorMessage = "Description must contain at most 200 characters!")]
         public string Description { get; set; }
 
-        public string OwnerId { get; set; }
+        public virtual ICollection<BindChannelUser> BindChannelUser { get; set; }
 
-        public virtual ApplicationUser Owner { get; set; }
+        public virtual ICollection<BindChannelCategory> BindChannelCategory { get; set; }
 
     }
 
