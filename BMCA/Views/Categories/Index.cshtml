@@ -1,0 +1,21 @@
+﻿@using BMCA.Models
+
+@{
+    ViewData["Title"] = "List Categories";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+@if (ViewBag.TempMsg != null)
+{
+    <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.TempMsg</h2>
+}
+
+@foreach (Category _Elem in ViewBag.Categories)
+{
+    <div class="card">
+        <h2>@_Elem.Name</h2>
+    </div>
+}

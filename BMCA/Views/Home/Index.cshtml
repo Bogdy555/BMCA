@@ -2,6 +2,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<br />
+
+<div class="card-body">
+    <div>
+        <h1 class="display-4 text-center">Welcome</h1>
+        <p class="text-center">We are happy to have you on our beautiful website. It is the best place for you and your coworkers to comunicate with eachother. What are you waiting for? Join now!</p>
+    </div>
+
+    <div>
+        @await Html.PartialAsync("_LoginPartial")
+    </div>
 </div>

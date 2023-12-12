@@ -10,21 +10,26 @@ namespace BMCA.Controllers
 	{
 
 		private readonly ApplicationDbContext MyDataBase;
-
 		private readonly UserManager<ApplicationUser> MyUserManager;
-
 		private readonly RoleManager<IdentityRole> MyRoleManager;
+		private readonly SignInManager<ApplicationUser> MySignInManager;
 
-		public HomeController(ApplicationDbContext _MyDataBase, UserManager<ApplicationUser> _MyUserManager, RoleManager<IdentityRole> _MyRoleManager)
+		public HomeController(ApplicationDbContext _MyDataBase, UserManager<ApplicationUser> _MyUserManager, RoleManager<IdentityRole> _MyRoleManager, SignInManager<ApplicationUser> _MySignInManager)
 		{
 			MyDataBase = _MyDataBase;
 			MyUserManager = _MyUserManager;
 			MyRoleManager = _MyRoleManager;
+			MySignInManager = _MySignInManager;
 		}
 
 		public IActionResult Index()
 		{
-			return View();
+			if (!MySignInManager.IsSignedIn(User))
+			{
+				return View();
+			}
+
+			return Redirect("Users/Show/" + MyUserManager.GetUserId(User));
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
