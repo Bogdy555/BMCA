@@ -2,11 +2,14 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul>
-    <li>
-        <a class="text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li>
-        <a class="text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-</ul>
+<div class="row">
+    <div>
+        <div class="mb-5 d-flex justify-content-center align-content-center">
+            <a class="BMCA-style btn btn-block" asp-area="Identity" asp-page="/Account/Login">Log in</a>
+        </div>
+
+        <div class="mb-5 d-flex justify-content-center align-content-center">
+            <a class="BMCA-style btn btn-block" asp-area="Identity" asp-page="/Account/Register">Sign in</a>
+        </div>
+    </div>
+</div>

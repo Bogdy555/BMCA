@@ -2,15 +2,16 @@
     ViewData["Title"] = "Home Page";
 }
 
-<br />
-
-<div class="card-body">
-    <div>
-        <h1 class="display-4 text-center">Welcome</h1>
-        <p class="text-center">We are happy to have you on our beautiful website. It is the best place for you and your coworkers to comunicate with eachother. What are you waiting for? Join now!</p>
+<h1 class="display-5 text-center m-5">BMCA</h1>
+<div class="card-body row">
+    <div class="col-md-6">
+        @await Html.PartialAsync("_LoginPartial")
     </div>
 
-    <div>
-        @await Html.PartialAsync("_LoginPartial")
+    <br />
+
+    <div class="col-md-6">
+        <h1 class="display-4 text-center">Welcome</h1>
+        <p class="text-center">We are happy to have you on our beautiful website. It is the best place for you and your coworkers to comunicate with eachother. What are you waiting for? Join now!</p>
     </div>
 </div>
