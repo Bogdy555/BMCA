@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BMCA.Controllers
 {
 
+	[Authorize(Roles = "Admin")]
 	public class CategoriesController : Controller
 	{
 
@@ -26,7 +27,6 @@ namespace BMCA.Controllers
 			MySignInManager = _MySignInManager;
 		}
 
-		[Authorize(Roles = "Admin")]
 		public IActionResult Index()
 		{
 			ViewBag.Categories = MyDataBase.Categories;
@@ -37,6 +37,104 @@ namespace BMCA.Controllers
 			}
 
 			return View();
+		}
+
+		public IActionResult New()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult New(Category _Category)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(_Category);
+			}
+
+			try
+			{
+				MyDataBase.Categories.Add(_Category);
+
+				MyDataBase.SaveChanges();
+
+				TempData["TempMsg"] = "New category added!";
+
+				return RedirectToAction("Index");
+			}
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to add the category. Please contact the dev team in order to resolve this issue." });
+			}
+		}
+
+		public IActionResult Edit(int _ID)
+		{
+			try
+			{
+				return View(MyDataBase.Categories.Find(_ID));
+			}
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing category!" });
+			}
+		}
+
+		[HttpPost]
+		public IActionResult Edit(int _ID, Category _Category)
+		{
+			_Category.ID = _ID;
+
+			Category? _OriginalCategory = MyDataBase.Categories.Find(_ID);
+
+			if (_OriginalCategory == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing category!" });
+			}
+
+			if (!ModelState.IsValid)
+			{
+				return View(_Category);
+			}
+
+			try
+			{
+				_OriginalCategory.Name = _Category.Name;
+
+				MyDataBase.SaveChanges();
+
+				TempData["TempMsg"] = "Edit completed!";
+
+				return RedirectToAction("Index");
+			}
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to edit the category. Please contact the dev team in order to resolve this issue." });
+			}
+		}
+
+		[HttpPost]
+		public IActionResult Delete(int _ID)
+		{
+			Category? _Category = MyDataBase.Categories.Find(_ID);
+
+			if (_Category == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Delete attempt on non existing category!" });
+			}
+
+			try
+			{
+				MyDataBase.Categories.Remove(_Category);
+
+				MyDataBase.SaveChanges();
+
+				return RedirectToAction("Index");
+			}
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to delete the category. Please contact the dev team in order to resolve this issue." } );
+			}
 		}
 
 	}

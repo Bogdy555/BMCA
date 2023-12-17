@@ -41,7 +41,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(name: "HomePage", pattern: "", defaults: new { controller = "Home", action = "Index" });
+
 app.MapControllerRoute(name: "CategoriesList", pattern: "Categories/List", defaults: new { controller = "Categories", action = "Index" });
+app.MapControllerRoute(name: "CategoriesNew", pattern: "Categories/New", defaults: new { controller = "Categories", action = "New" });
+app.MapControllerRoute(name: "CategoriesEdit", pattern: "Categories/Edit/{_ID}", defaults: new { controller = "Categories", action = "Edit" });
+app.MapControllerRoute(name: "CategoriesDelete", pattern: "Categories/Delete/{_ID}", defaults: new { controller = "Categories", action = "Delete" });
+
 app.MapRazorPages();
 
 app.Run();

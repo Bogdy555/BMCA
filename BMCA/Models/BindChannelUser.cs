@@ -15,9 +15,9 @@ namespace BMCA.Models
 
         public string UserId { get; set; }
 
-        public virtual Channel Channel { get; set; }
+        public virtual Channel? Channel { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
 
     }
 

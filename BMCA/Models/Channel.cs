@@ -21,9 +21,9 @@ namespace BMCA.Models
         [StringLength(200, ErrorMessage = "Description must contain at most 200 characters!")]
         public string Description { get; set; }
 
-        public virtual ICollection<BindChannelUser> BindChannelUser { get; set; }
+        public virtual ICollection<BindChannelUser>? BindChannelUser { get; set; }
 
-        public virtual ICollection<BindChannelCategory> BindChannelCategory { get; set; }
+        public virtual ICollection<BindChannelCategory>? BindChannelCategory { get; set; }
 
     }
 

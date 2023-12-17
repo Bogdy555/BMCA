@@ -1,0 +1,20 @@
+﻿@using BMCA.Models
+
+@model Category
+
+@{
+    ViewData["Title"] = "New Category";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<a href="/Categories/List">Back</a>
+
+<form action="/Categories/New" method="post">
+    @Html.Label("Name", "Name: ")
+    @Html.TextBox("Name")
+    @Html.ValidationMessage("Name")
+    <button type="submit">Done</button>
+</form>

@@ -1,4 +1,8 @@
 ﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Category
 
 @{
     ViewData["Title"] = "List Categories";
@@ -13,9 +17,19 @@
     <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.TempMsg</h2>
 }
 
+<a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
+
+<br />
+
+<a href="/Categories/New">New</a>
+
 @foreach (Category _Elem in ViewBag.Categories)
 {
     <div class="card">
         <h2>@_Elem.Name</h2>
+        <a href="/Categories/Edit/@_Elem.ID">Edit</a>
+        <form action="/Categories/Delete/@_Elem.ID" method="post">
+            <button type="submit">Delete</button>
+        </form>
     </div>
 }

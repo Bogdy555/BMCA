@@ -5,7 +5,7 @@ namespace BMCA.Models
     public class ApplicationUser : IdentityUser
     {
 
-        public virtual ICollection<BindChannelUser> BindChannelUser { get; set; }
+        public virtual ICollection<BindChannelUser>? BindChannelUser { get; set; }
 
     }
 }
