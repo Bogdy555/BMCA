@@ -2,16 +2,20 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1 class="display-5 text-center m-5">BMCA</h1>
-<div class="card-body row">
-    <div class="col-md-6">
-        @await Html.PartialAsync("_LoginPartial")
+<div class="text-center mt-5">
+    <img src="/favicontest.ico" width="200" height="200" />
+</div>
+<hr />
+<div class="card-body row login">
+    <div class="col-md-7 info-login">
+        <h5 class="display-4 text-center fw-bold">Welcome to BMCA</h5>
+        <p class="text-center">We are happy to have you on our beautiful website. It is the best place for you and your coworkers to comunicate with eachother. What are you waiting for? Join now!</p>
     </div>
 
     <br />
 
-    <div class="col-md-6">
-        <h1 class="display-4 text-center">Welcome</h1>
-        <p class="text-center">We are happy to have you on our beautiful website. It is the best place for you and your coworkers to comunicate with eachother. What are you waiting for? Join now!</p>
+    <div class="col-md-5 input-login">
+        <img class="user_photo" src="/user.png" width="100" height="100" />
+        @await Html.PartialAsync("_LoginPartial")
     </div>
 </div>

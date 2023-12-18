@@ -24,7 +24,10 @@ namespace BMCA.Controllers
 
 		public IActionResult Index()
 		{
-			if (!MySignInManager.IsSignedIn(User))
+            ViewData["BodyStyle"] = "background: linear-gradient(to bottom, #161235, #242050, #24243e);";
+            ViewData["BodyClass"] = "custom-body-class";
+            return View();
+            if (!MySignInManager.IsSignedIn(User))
 			{
 				return View();
 			}
