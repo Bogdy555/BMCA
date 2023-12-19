@@ -27,7 +27,7 @@ namespace BMCA.Controllers
 			MySignInManager = _MySignInManager;
 		}
 
-		public IActionResult Index()
+		public IActionResult List()
 		{
 			ViewBag.Categories = MyDataBase.Categories;
 
@@ -60,7 +60,7 @@ namespace BMCA.Controllers
 
 				TempData["TempMsg"] = "New category added!";
 
-				return RedirectToAction("Index");
+				return RedirectToAction("List");
 			}
 			catch
 			{
@@ -105,7 +105,7 @@ namespace BMCA.Controllers
 
 				TempData["TempMsg"] = "Edit completed!";
 
-				return RedirectToAction("Index");
+				return RedirectToAction("List");
 			}
 			catch
 			{
@@ -129,7 +129,7 @@ namespace BMCA.Controllers
 
 				MyDataBase.SaveChanges();
 
-				return RedirectToAction("Index");
+				return RedirectToAction("List");
 			}
 			catch
 			{
