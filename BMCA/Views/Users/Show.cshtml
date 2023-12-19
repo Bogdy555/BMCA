@@ -1,0 +1,29 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = Model.UserName;
+}
+
+<div style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+    <div>
+        <p>Find the channel that you want to access!</p>
+
+@*
+        @foreach (BindChannelUser _Elem in Model.BindChannelUser)
+        {
+            <p>@_Elem.Channel.Name</p>
+        }
+*@
+    </div>
+    <div>
+        <h1>@Model.UserName</h1>
+        @if (User.IsInRole("Admin"))
+        {
+            <a href="/Users/List">List Users</a>
+        }
+    </div>
+</div>
