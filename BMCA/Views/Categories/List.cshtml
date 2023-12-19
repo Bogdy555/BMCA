@@ -25,7 +25,7 @@
 
 @foreach (Category _Elem in ViewBag.Categories)
 {
-    <div class="card">
+    <div class="card" style="background: black;">
         <h2>@_Elem.Name</h2>
         <a href="/Categories/Edit/@_Elem.ID">Edit</a>
         <form action="/Categories/Delete/@_Elem.ID" method="post">

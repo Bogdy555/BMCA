@@ -1,4 +1,6 @@
 ﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
 
 @model ApplicationUser
 
@@ -17,9 +19,13 @@
 
 <br />
 
+<a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
+
+<br />
+
 @foreach (ApplicationUser _Elem in ViewBag.Users)
 {
-    <div class="card">
+    <div class="card" style="background: black;">
         <h1>@_Elem.UserName</h1>
         <form action="/Users/Delete/@_Elem.Id" method="post">
             <button type="submit">Delete</button>

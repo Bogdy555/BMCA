@@ -25,5 +25,9 @@
         {
             <a href="/Users/List">List Users</a>
         }
+        @if (User.IsInRole("Admin"))
+        {
+            <a href="/Categories/List">List Categories</a>
+        }
     </div>
 </div>
