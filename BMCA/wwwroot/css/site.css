@@ -1,45 +1,46 @@
-.BMCA-style {
+.BMCA_btn {
     background-color: #473388;
     color: white;
     font-size: 30px;
 }
 
-.BMCA-style:hover {
+.BMCA_btn:hover {
     background-color: #573B8A;
     color: white;
 }
 
-.BMCA-style:active {
+.BMCA_btn:active {
     background-color: #473388;
-    color: white;
     border-color: transparent;
 }
 
-.login {
+.BMCA_card{
     margin: 0 150px;
-    background-color: transparent;
-    height: 50vh;
-    padding: 0;
-}
-
-.input-login {
     background-color: #2f2159;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0px 20px 20px 0px;
+    padding: 0;
+    border-radius: 20px;
+    box-shadow: 0 26px 42px rgb(38, 27, 72);
 }
 
-.info-login {
+.BMCA_subcard{
+    background-color: #2f2159;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgb(47, 33, 89);
-    box-shadow: 0 26px 42px rgb(38, 27, 72);
-    border-radius: 20px 0px 0px 20px;
+}
+
+.BMCA_form {
+    color: black;
+    margin: 0 100px;
+}
+
+.BMCA_back {
+    margin-right: auto;
     color: white;
+    font-size: 30px;
+    text-decoration: none;
 }
 
 html {
@@ -54,16 +55,17 @@ html {
 }
 
 @media (max-width: 770px) {
-    .info-login {
-        border-radius: 20px 20px 0px 0px;
-    }
-
-    .input-login {
-        border-radius: 0px 0px 20px 20px;
-    }
-
-    .login {
+    .BMCA_card{
         margin: 0 0; 
+        padding: 14px;
+    }
+
+    .BMCA_subcard {
+        margin: 0 0;
+    }
+
+    .BMCA_form {
+        margin: 0 25px;
     }
 
     .user_photo {
