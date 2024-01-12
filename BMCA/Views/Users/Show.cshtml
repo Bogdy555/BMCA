@@ -12,14 +12,19 @@
     <div>
         <p>Find the channel that you want to access!</p>
 
-@*
-        @foreach (BindChannelUser _Elem in Model.BindChannelUser)
+        <a href="/Channels/New">Create a new channel!</a>
+
+        <br />
+        <br />
+
+        @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
         {
-            <p>@_Elem.Channel.Name</p>
+            @Html.Partial("ChannelButton", _Channel)
         }
-*@
+
     </div>
     <div>
+
         <h1>@Model.UserName</h1>
         @if (User.IsInRole("Admin"))
         {
@@ -31,3 +36,12 @@
         }
     </div>
 </div>
+<script>
+    var buttons = document.getElementsByClassName("BMCA_btn");
+    var userId = @MyUserManager.GetUserId(User);
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function () {
+            window.location.href = "User/Show/" + userId + this.innerHTML;
+        });
+    }
+</script>

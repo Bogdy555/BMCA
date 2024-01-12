@@ -1,0 +1,26 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Channel 
+
+<div style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+    <div>
+        <p>Find the channel that you want to access!</p>
+
+        <a href="/Channels/New">Create a new channel!</a>
+
+        <br />
+        <br />
+
+        @foreach (BMCA.Models.BindChannelUser _Channel in ViewBag.UserChannels)
+        {
+            @Html.Partial("ChannelButton", _Channel.Channel)
+        }
+
+    </div>
+    <div>
+        <div>@Model.Name</div>
+
+    </div>
+</div>

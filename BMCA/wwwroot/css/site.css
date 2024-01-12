@@ -43,6 +43,10 @@
     text-decoration: none;
 }
 
+.BMCA_chat {
+    width: stretch;
+}
+
 html {
     font-size: 14px;
 }

@@ -1,0 +1,35 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Channel 
+
+@{
+    ViewData["Title"] = "Create a new Channel.";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<br />
+
+<a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
+
+<form action="/Channels/New/" method="post" >
+    @Html.Label("Name", "Name: ")
+    <br />
+    @Html.TextBox("Name")
+    @Html.ValidationMessageFor(c => c.Name, "", new {@class = "text-danger"})
+
+    <br />
+    <br />
+
+    @Html.Label("Description", "Description: ")
+    <br />
+    @Html.TextArea("Description")
+    @Html.ValidationMessage("Description", null, new {@class = "text-danger"})
+
+    <br />
+    <br />
+
+    <input type="submit" value="Create" />
+</form>

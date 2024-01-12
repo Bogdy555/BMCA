@@ -3,6 +3,7 @@ using BMCA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace BMCA.Controllers
 {
@@ -39,9 +40,23 @@ namespace BMCA.Controllers
 		[Authorize(Roles = "Guest, User, Moderator, Admin")]
 		public IActionResult Show(string _ID)
 		{
-			try
+            try
 			{
-				return View(MyDataBase.Users.Find(_ID));
+				var _BindChannelUser = MyDataBase.BindChannelUserEntries
+					.Where(_BindChannelUser => _BindChannelUser.UserId == _ID)
+					.ToList();
+
+				List<int> _ChannelIds = new List<int>();
+				foreach (BindChannelUser _Bind in _BindChannelUser)
+				{
+					_ChannelIds.Add(_Bind.ChannelId);
+				}
+
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.ToList();
+
+                return View(MyDataBase.Users.Find(_ID));
 			}
 			catch
 			{
@@ -78,7 +93,6 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to delete the user. Please contact the dev team in order to resolve this issue." } );
 			}
 		}
-
 	}
 
 }

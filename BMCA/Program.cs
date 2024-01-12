@@ -47,6 +47,11 @@ app.MapControllerRoute(name: "CategoriesNew", pattern: "Categories/New", default
 app.MapControllerRoute(name: "CategoriesEdit", pattern: "Categories/Edit/{_ID}", defaults: new { controller = "Categories", action = "Edit" });
 app.MapControllerRoute(name: "CategoriesDelete", pattern: "Categories/Delete/{_ID}", defaults: new { controller = "Categories", action = "Delete" });
 
+app.MapControllerRoute(name: "ChannelsShow", pattern: "Channels/Show/{_ID}", defaults: new { controller = "Channels", action = "Show" });
+app.MapControllerRoute(name: "ChannelsNew", pattern: "Channels/New", defaults: new { controller = "Channels", action = "New" });
+app.MapControllerRoute(name: "ChannelsEdit", pattern: "Channels/Edit/{_ID}", defaults: new { controller = "Channels", action = "Edit" });
+app.MapControllerRoute(name: "ChannelsDelete", pattern: "Channels/Delete/{_ID}", defaults: new { controller = "Channels", action = "Delete" });
+
 app.MapControllerRoute(name: "UsersList", pattern: "Users/List", defaults: new { controller = "Users", action = "List" });
 app.MapControllerRoute(name: "UsersShow", pattern: "Users/Show/{_ID}", defaults: new { controller = "Users", action = "Show" });
 app.MapControllerRoute(name: "UsersDelete", pattern: "Users/Delete/{_ID}", defaults: new { controller = "Users", action = "Delete" });
