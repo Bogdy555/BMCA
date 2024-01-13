@@ -14,6 +14,12 @@
             <h5>Chats</h5>
             <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
         </div>
+        <div>
+            <form action="/Users/Show/@Model.Id" method="get">
+                @Html.TextBox("_Search")
+                <button type="submit">Search</button>
+            </form>
+        </div>
         <hr / class="mt-0">
 
         <div class="d-inline-block">

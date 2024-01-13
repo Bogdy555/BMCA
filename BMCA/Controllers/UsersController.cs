@@ -38,7 +38,7 @@ namespace BMCA.Controllers
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]
-		public IActionResult Show(string _ID)
+		public IActionResult Show(string _ID, string? _Search)
 		{
 			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
 				.Where(_BindChannelUser => _BindChannelUser.UserId == _ID)
@@ -50,9 +50,19 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			ViewBag.UserChannels = MyDataBase.Channels
-				.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
-				.ToList();
+			if (_Search == null)
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.ToList();
+			}
+			else
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.Where(_Channel => _Channel.Name.ToUpper().Contains(_Search.ToUpper()))
+					.ToList();
+			}
 
 			try
 			{

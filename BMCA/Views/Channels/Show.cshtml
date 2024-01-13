@@ -11,6 +11,12 @@
                 <h5>Chats</h5>
                 <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
             </div>
+            <div>
+                <form action="/Channels/Show/@Model.ID" method="get">
+                    @Html.TextBox("_Search")
+                    <button type="submit">Search</button>
+                </form>
+            </div>
             <hr / class="mt-0">
 
             <div class="d-inline-block">
@@ -26,7 +32,7 @@
             <h1>@Model.Name</h1>
         </div>
         <div>
-            @foreach (Message _Message in Model.Messages)
+            @foreach (Message _Message in ViewBag.ChatMessages)
             {
                 if (_Message.UserId == MyUserManager.GetUserId(User))
                 {

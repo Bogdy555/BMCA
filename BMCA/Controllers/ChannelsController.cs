@@ -24,11 +24,11 @@ namespace BMCA.Controllers
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]
-		public IActionResult Show(int _ID)
+		public IActionResult Show(int _ID, string? _Search)
 		{
 			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Include("Messages").Where(m => m.ID == _ID).First();
 
-			if (_Channel == null || _Channel.BindsChannelUser == null)
+			if (_Channel == null || _Channel.BindsChannelUser == null || _Channel.Messages == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Could not find the channel!" });
 			}
@@ -59,9 +59,21 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			ViewBag.UserChannels = MyDataBase.Channels
-				.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
-				.ToList();
+			if (_Search == null)
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.ToList();
+			}
+			else
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.Where(_Channel => _Channel.Name.ToUpper().Contains(_Search.ToUpper()))
+					.ToList();
+			}
+
+			ViewBag.ChatMessages = _Channel.Messages.ToList().OrderBy(m => m.Date);
 
 			return View(_Channel);
 		}
