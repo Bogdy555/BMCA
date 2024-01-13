@@ -37,7 +37,7 @@ namespace BMCA.Controllers
 			return View();
 		}
 
-		[Authorize(Roles = "Guest,User,Moderator,Admin")]
+		[Authorize(Roles = "User,Moderator,Admin")]
 		public IActionResult Show(string _ID)
 		{
 			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
@@ -64,7 +64,7 @@ namespace BMCA.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Guest,User,Moderator,Admin")]
+		[Authorize(Roles = "User,Moderator,Admin")]
 		[HttpPost]
 		public IActionResult Delete(string _ID)
 		{

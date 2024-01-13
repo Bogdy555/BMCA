@@ -23,7 +23,7 @@ namespace BMCA.Controllers
 			MySignInManager = _MySignInManager;
 		}
 
-		[Authorize(Roles = "Guest,User,Moderator,Admin")]
+		[Authorize(Roles = "User,Moderator,Admin")]
 		public IActionResult Show(int _ID)
 		{
 			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Include("Messages").Where(m => m.ID == _ID).First();

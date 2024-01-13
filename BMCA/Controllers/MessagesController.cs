@@ -3,6 +3,7 @@ using BMCA.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
 
 namespace BMCA.Controllers
@@ -28,8 +29,35 @@ namespace BMCA.Controllers
 		[HttpPost]
 		public IActionResult New(Message _Message, int _ChannelId)
 		{
-			// vezi daca userul face parte din channel
-			// adauga channel id pe model
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ChannelId).First();
+
+			if (_Channel == null || _Channel.BindsChannelUser == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "The channel does not exist" });
+			}
+
+			bool _Found = false;
+
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			{
+				if (_Bind.UserId == MyUserManager.GetUserId(User))
+				{
+					_Found = true;
+					break;
+				}
+			}
+
+			if (!_Found)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Access denied" });
+			}
+
+			_Message.Date = DateTime.Now;
+			_Message.UserId = MyUserManager.GetUserId(User);
+			_Message.ChannelId = _ChannelId;
+
+			ModelState.Clear();
+			TryValidateModel(_Message);
 
 			if (!ModelState.IsValid)
 			{
@@ -54,8 +82,6 @@ namespace BMCA.Controllers
 		[HttpPost]
 		public IActionResult Edit(int _ID, Message _Message)
 		{
-			// verifica daca userul e cel care a creat mesajul
-
 			_Message.ID = _ID;
 
 			Message? _OriginalMessage = MyDataBase.Messages.Find(_ID);
@@ -63,6 +89,11 @@ namespace BMCA.Controllers
 			if (_OriginalMessage == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing message!" });
+			}
+
+			if (_OriginalMessage.UserId != MyUserManager.GetUserId(User))
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Access denied" });
 			}
 
 			if (!ModelState.IsValid)

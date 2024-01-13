@@ -20,7 +20,6 @@ namespace BMCA.Data
             string _GUID_Admin_Role = Guid.NewGuid().ToString();
             string _GUID_Moderator_Role = Guid.NewGuid().ToString();
             string _GUID_User_Role = Guid.NewGuid().ToString();
-            string _GUID_Guest_Role = Guid.NewGuid().ToString();
 
             string _GUID_Admin = Guid.NewGuid().ToString();
 
@@ -28,8 +27,7 @@ namespace BMCA.Data
             (
                 new IdentityRole { Id = _GUID_Admin_Role, Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Id = _GUID_Moderator_Role, Name = "Moderator", NormalizedName = "MODERATOR" },
-                new IdentityRole { Id = _GUID_User_Role, Name = "User", NormalizedName = "USER" },
-                new IdentityRole { Id = _GUID_Guest_Role, Name = "Guest", NormalizedName = "GUEST" }
+                new IdentityRole { Id = _GUID_User_Role, Name = "User", NormalizedName = "USER" }
             );
 
             var _Hasher = new PasswordHasher<ApplicationUser>();
@@ -39,12 +37,12 @@ namespace BMCA.Data
                 new ApplicationUser
                 {
                     Id = _GUID_Admin,
-                    UserName = "admin@test.com",
+                    UserName = "Admin",
                     EmailConfirmed = true,
                     NormalizedEmail = "ADMIN@TEST.COM",
                     Email = "admin@test.com",
-                    NormalizedUserName = "ADMIN@TEST.COM",
-                    PasswordHash = _Hasher.HashPassword(null, "WAdhiawu_!$$#224$daksno")
+                    NormalizedUserName = "ADMIN",
+                    PasswordHash = _Hasher.HashPassword(null, "Parola_2")
                 }
             );
 
