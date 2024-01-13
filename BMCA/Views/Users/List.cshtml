@@ -8,27 +8,29 @@
     ViewData["Title"] = "List Users";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<br />
-
-@if (ViewBag.TempMsg != null)
-{
-    <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.TempMsg</h2>
-}
-
-<br />
-
-<a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
-
-<br />
-
-@foreach (ApplicationUser _Elem in ViewBag.Users)
-{
-    <div class="card" style="background: black;">
-        <h1>@_Elem.UserName</h1>
-        <form action="/Users/Delete/@_Elem.Id" method="post">
-            <button type="submit">Delete</button>
-        </form>
+<div class="mt-5 BMCA_sitecard">
+    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Users/Show/@MyUserManager.GetUserId(User)"></a>
+    <div class="mt-2" style="text-align:center">
+        <h1 style="margin:0 20px">@ViewData["Title"]</h1>
     </div>
-}
+    <hr />
+    <div>
+        @if (ViewBag.TempMsg != null)
+        {
+            <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.TempMsg</h2>
+            <br />
+        }
+
+        @foreach (ApplicationUser _Elem in ViewBag.Users)
+        {
+            <div class="card m-3 p-4" style="background: #292558;">
+                <h2 class="mb-0">@_Elem.UserName</h2>
+                <hr>
+                <form action="/Users/Delete/@_Elem.Id" method="post">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Delete</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+

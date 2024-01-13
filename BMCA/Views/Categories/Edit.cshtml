@@ -6,16 +6,20 @@
     ViewData["Title"] = "Edit Category";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="mt-5 BMCA_sitecard">
+    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Categories/List"></a>
+    <div class="mt-2" style="text-align:center">
+        <h1 style="margin:0 20px">@ViewData["Title"]</h1>
+    </div>
 
-<br />
+    <hr />
 
-<a href="/Categories/List">Back</a>
-
-<form action="/Categories/Edit/@Model.ID" method="post">
-    @Html.Label("Name", "Name: ")
-    @Html.Editor("Name")
-    @Html.ValidationMessage("Name")
-    <button type="submit">Done</button>
-</form>
-
+    <div style="text-align:center">
+        <form action="/Categories/Edit/@Model.ID" method="post">
+            @Html.Label("Name", "Name: ")
+            @Html.Editor("Name")
+            @Html.ValidationMessage("Name")
+            <button class="btn BMCA_btn" style="font-size:15px;" type="submit">Done</button>
+        </form>
+    </div>
+</div>

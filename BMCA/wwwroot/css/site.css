@@ -14,19 +14,21 @@
         border-color: transparent;
     }
 
-.BMCA_rbtn {
-    background-color: #473388;
-    color: white;
-    font-size: 30px;
-    border: 25px solid transparent;
-}
-
 .BMCA_card {
     margin: 0 150px;
     background-color: #2f2159;
     padding: 0;
     border-radius: 20px;
     box-shadow: 0 26px 42px rgb(38, 27, 72);
+}
+
+.BMCA_sitecard {
+    margin: 0 50px;
+    background-color: #242050;
+    padding: 0;
+    border-radius: 20px;
+    box-shadow: 0 26px 42px rgb(38, 27, 72);
+    padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 -  1000));
 }
 
 .BMCA_subcard {
@@ -48,10 +50,6 @@
     color: white;
     font-size: 30px;
     text-decoration: none;
-}
-
-.BMCA_chat {
-    padding-: 12%;
 }
 
 html {
