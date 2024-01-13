@@ -56,6 +56,10 @@ app.MapControllerRoute(name: "UsersList", pattern: "Users/List", defaults: new {
 app.MapControllerRoute(name: "UsersShow", pattern: "Users/Show/{_ID}", defaults: new { controller = "Users", action = "Show" });
 app.MapControllerRoute(name: "UsersDelete", pattern: "Users/Delete/{_ID}", defaults: new { controller = "Users", action = "Delete" });
 
+app.MapControllerRoute(name: "MessagesNew", pattern: "Messages/New", defaults: new { controller = "Messages", action = "New" });
+app.MapControllerRoute(name: "MessagesEdit", pattern: "Messages/Edit/{_ID}", defaults: new { controller = "Messages", action = "Edit" });
+app.MapControllerRoute(name: "MessagesDelete", pattern: "Messages/Delete/{_ID}", defaults: new { controller = "Messages", action = "Delete" });
+
 app.MapRazorPages();
 
 app.Run();

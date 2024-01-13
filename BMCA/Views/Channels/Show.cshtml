@@ -40,5 +40,11 @@
                 }
             }
         </div>
+        <div>
+            <form action="/Messages/New?_ChannelId=@Model.ID" method="post">
+                @Html.TextBox("_Message.Content")
+                <button type="submit">Send</button>
+            </form>
+        </div>
     </div>
 </div>
