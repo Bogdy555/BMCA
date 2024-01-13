@@ -4,37 +4,24 @@
 
 @model Channel
 
-<div style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+<div class="mt-5" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
     <div>
-        <p>Find the channel that you want to access!</p>
+        <div>
+            <div class="d-flex justify-content-between">
+                <h5>Chats</h5>
+                <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
+            </div>
+            <hr / class="mt-0">
 
-        <a href="/Channels/New">Create a new channel!</a>
-
-        <br />
-        <br />
-
-        @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
-        {
-            @Html.Partial("ChannelButton", _Channel)
-        }
-
+            <div class="d-inline-block">
+                @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
+                {
+                    @Html.Partial("ChannelButton", _Channel)
+                }
+            </div>
+        </div>
     </div>
     <div>
-        <div>
-            <h1>@Model.Name</h1>
-        </div>
-        <div>
-            @foreach (Message _Message in Model.Messages)
-            {
-                if (_Message.UserId == MyUserManager.GetUserId(User))
-                {
-                    <p>@_Message.Content</p>
-                }
-                else
-                {
-                    <p>@_Message.Content</p>
-                }
-            }
-        </div>
+        <div>@Model.Name</div>
     </div>
 </div>

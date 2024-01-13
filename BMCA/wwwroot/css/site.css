@@ -4,17 +4,24 @@
     font-size: 30px;
 }
 
-.BMCA_btn:hover {
-    background-color: #573B8A;
-    color: white;
-}
+    .BMCA_btn:hover {
+        background-color: #573B8A;
+        color: white;
+    }
 
-.BMCA_btn:active {
+    .BMCA_btn:active {
+        background-color: #473388;
+        border-color: transparent;
+    }
+
+.BMCA_rbtn {
     background-color: #473388;
-    border-color: transparent;
+    color: white;
+    font-size: 30px;
+    border: 25px solid transparent;
 }
 
-.BMCA_card{
+.BMCA_card {
     margin: 0 150px;
     background-color: #2f2159;
     padding: 0;
@@ -22,7 +29,7 @@
     box-shadow: 0 26px 42px rgb(38, 27, 72);
 }
 
-.BMCA_subcard{
+.BMCA_subcard {
     background-color: #2f2159;
     border-radius: 20px;
     display: flex;
@@ -44,7 +51,7 @@
 }
 
 .BMCA_chat {
-    width: stretch;
+    padding-: 12%;
 }
 
 html {
@@ -55,12 +62,11 @@ html {
     html {
         font-size: 16px;
     }
-
 }
 
 @media (max-width: 770px) {
-    .BMCA_card{
-        margin: 0 0; 
+    .BMCA_card {
+        margin: 0 0;
         padding: 14px;
     }
 
@@ -83,7 +89,11 @@ html {
 }
 
 body {
-    background-color: #151515; 
+    background-color: #151515;
     color: white;
     margin-bottom: 60px;
+}
+
+a {
+    color: white
 }
