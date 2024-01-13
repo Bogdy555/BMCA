@@ -27,7 +27,7 @@ namespace BMCA.Controllers
 		[Authorize(Roles = "Admin")]
 		public IActionResult List()
 		{
-			ViewBag.Users = MyDataBase.Users;
+			ViewBag.Users = MyDataBase.AppUsers;
 
 			if (TempData.ContainsKey("Message"))
 			{
@@ -37,26 +37,26 @@ namespace BMCA.Controllers
 			return View();
 		}
 
-		[Authorize(Roles = "Guest, User, Moderator, Admin")]
+		[Authorize(Roles = "Guest,User,Moderator,Admin")]
 		public IActionResult Show(string _ID)
 		{
-            try
+			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
+				.Where(_BindChannelUser => _BindChannelUser.UserId == _ID)
+				.ToList();
+
+			List<int> _ChannelIds = new List<int>();
+			foreach (BindChannelUser _Bind in _BindChannelUser)
 			{
-				var _BindChannelUser = MyDataBase.BindChannelUserEntries
-					.Where(_BindChannelUser => _BindChannelUser.UserId == _ID)
-					.ToList();
+				_ChannelIds.Add(_Bind.ChannelId);
+			}
 
-				List<int> _ChannelIds = new List<int>();
-				foreach (BindChannelUser _Bind in _BindChannelUser)
-				{
-					_ChannelIds.Add(_Bind.ChannelId);
-				}
+			ViewBag.UserChannels = MyDataBase.Channels
+				.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+				.ToList();
 
-				ViewBag.UserChannels = MyDataBase.Channels
-					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
-					.ToList();
-
-                return View(MyDataBase.Users.Find(_ID));
+			try
+			{
+				return View(MyDataBase.AppUsers.Find(_ID));
 			}
 			catch
 			{
@@ -64,11 +64,11 @@ namespace BMCA.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Guest, User, Moderator, Admin")]
+		[Authorize(Roles = "Guest,User,Moderator,Admin")]
 		[HttpPost]
 		public IActionResult Delete(string _ID)
 		{
-			ApplicationUser? _DeleteUser = MyDataBase.Users.Find(_ID);
+			ApplicationUser? _DeleteUser = MyDataBase.AppUsers.Find(_ID);
 
 			if (_DeleteUser == null)
 			{
@@ -82,7 +82,7 @@ namespace BMCA.Controllers
 
 			try
 			{
-				MyDataBase.Users.Remove(_DeleteUser);
+				MyDataBase.AppUsers.Remove(_DeleteUser);
 
 				MyDataBase.SaveChanges();
 

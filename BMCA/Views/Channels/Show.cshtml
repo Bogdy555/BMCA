@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> MyUserManager
 
-@model Channel 
+@model Channel
 
 <div style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
     <div>
@@ -13,14 +13,28 @@
         <br />
         <br />
 
-        @foreach (BMCA.Models.BindChannelUser _Channel in ViewBag.UserChannels)
+        @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
         {
-            @Html.Partial("ChannelButton", _Channel.Channel)
+            @Html.Partial("ChannelButton", _Channel)
         }
 
     </div>
     <div>
-        <div>@Model.Name</div>
-
+        <div>
+            <h1>@Model.Name</h1>
+        </div>
+        <div>
+            @foreach (Message _Message in Model.Messages)
+            {
+                if (_Message.UserId == MyUserManager.GetUserId(User))
+                {
+                    <p>@_Message.Content</p>
+                }
+                else
+                {
+                    <p>@_Message.Content</p>
+                }
+            }
+        </div>
     </div>
 </div>

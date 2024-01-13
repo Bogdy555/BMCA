@@ -29,7 +29,7 @@ namespace BMCA.Controllers
 				return View();
 			}
 
-			return Redirect("Users/Show/" + MyUserManager.GetUserId(User));
+			return Redirect("/Users/Show/" + MyUserManager.GetUserId(User));
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

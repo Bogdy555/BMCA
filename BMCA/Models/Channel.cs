@@ -22,9 +22,14 @@ namespace BMCA.Models
         [StringLength(200, ErrorMessage = "Description must contain at most 200 characters!")]
         public string Description { get; set; }
 
-        public virtual ICollection<BindChannelUser>? BindChannelUser { get; set; }
+        [Required(ErrorMessage = "A channel must have a category")]
+        public int CategoryId { get; set; }
 
-        public virtual ICollection<BindChannelCategory>? BindChannelCategory { get; set; }
+        public virtual Category? Category {  get; set; }
+
+        public virtual ICollection<BindChannelUser>? BindsChannelUser { get; set; }
+
+        public virtual ICollection<Message>? Messages { get; set; }
 
     }
 

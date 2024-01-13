@@ -34,7 +34,7 @@ namespace BMCA.Data
 
             var _Hasher = new PasswordHasher<ApplicationUser>();
 
-            _Context.Users.AddRange
+            _Context.AppUsers.AddRange
             (
                 new ApplicationUser
                 {

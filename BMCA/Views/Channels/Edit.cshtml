@@ -2,10 +2,10 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<ApplicationUser> MyUserManager
 
-@model Channel 
+@model Channel
 
 @{
-    ViewData["Title"] = "Create a new Channel.";
+    ViewData["Title"] = "Edit a Channel.";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -14,11 +14,11 @@
 
 <a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
 
-<form action="/Channels/New/" method="post" >
+<form action="/Channels/Edit/@Model.ID" method="post">
     @Html.Label("Name", "Name: ")
     <br />
     @Html.TextBox("Name")
-    @Html.ValidationMessageFor(c => c.Name, "", new {@class = "text-danger"})
+    @Html.ValidationMessageFor(c => c.Name, "", new { @class = "text-danger" })
 
     <br />
     <br />
@@ -26,7 +26,7 @@
     @Html.Label("Description", "Description: ")
     <br />
     @Html.TextArea("Description")
-    @Html.ValidationMessage("Description", null, new {@class = "text-danger"})
+    @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
 
     <br />
     <br />
@@ -39,5 +39,5 @@
     <br />
     <br />
 
-    <input type="submit" value="Create" />
+    <input type="submit" value="Done" />
 </form>
