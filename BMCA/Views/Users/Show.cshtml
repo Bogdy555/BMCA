@@ -8,19 +8,22 @@
     ViewData["Title"] = Model.UserName;
 }
 
-<div class="mt-5" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+<div class="mt-5 BMCA_sitecard" style="margin: 0; display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
     <div>
         <div class="d-flex justify-content-between">
             <h5>Chats</h5>
+            <div>
             <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
+            <a class="bi bi-person-fill" style="color: white" href="/Users/Show/@MyUserManager.GetUserId(User).ToString()"></a>
+            </div>
         </div>
+        <hr / class="mt-0">
         <div>
             <form action="/Users/Show/@Model.Id" method="get">
                 @Html.TextBox("_Search")
                 <button type="submit">Search</button>
             </form>
         </div>
-        <hr / class="mt-0">
 
         <div class="d-inline-block">
             @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)

@@ -7,37 +7,38 @@
 @{
     ViewData["Title"] = "Create a new Channel.";
 }
+<div class="mt-5 BMCA_sitecard">
+    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Users/Show/@MyUserManager.GetUserId(User)"></a>
+    <div class="mt-2" style="text-align:center">
+        <h1 style="margin:0 20px">@ViewData["Title"]</h1>
+    </div>
 
-<h1>@ViewData["Title"]</h1>
+    <hr />
 
-<br />
+    <div style="margin: 0 20px;">
+        <form action="/Channels/New/" method="post">
+            @Html.Label("Name", "Name: ")
+            <br />
+            @Html.TextBox("Name")
+            @Html.ValidationMessageFor(c => c.Name, "", new {@class = "text-danger"})
 
-<a href="/Users/Show/@MyUserManager.GetUserId(User)">Back</a>
+            <br />
 
-<form action="/Channels/New/" method="post" >
-    @Html.Label("Name", "Name: ")
-    <br />
-    @Html.TextBox("Name")
-    @Html.ValidationMessageFor(c => c.Name, "", new {@class = "text-danger"})
+            @Html.Label("Description", "Description: ")
+            <br />
+            @Html.TextArea("Description")
+            @Html.ValidationMessage("Description", null, new {@class = "text-danger"})
 
-    <br />
-    <br />
+            <br />
 
-    @Html.Label("Description", "Description: ")
-    <br />
-    @Html.TextArea("Description")
-    @Html.ValidationMessage("Description", null, new {@class = "text-danger"})
+            @Html.Label("CategoryId", "Category: ")
+            <br />
+            @Html.DropDownListFor(m => m.CategoryId, new SelectList(ViewBag.CategoriesList, "Value", "Text"), "Select category", new { @class = "form-control" })
+            @Html.ValidationMessage("CategoryId", null, new { @class = "text-danger" })
 
-    <br />
-    <br />
+            <br />
 
-    @Html.Label("CategoryId", "Category: ")
-    <br />
-    @Html.DropDownListFor(m => m.CategoryId, new SelectList(ViewBag.CategoriesList, "Value", "Text"), "Select category", new { @class = "form-control" })
-    @Html.ValidationMessage("CategoryId", null, new { @class = "text-danger" })
-
-    <br />
-    <br />
-
-    <input type="submit" value="Create" />
-</form>
+            <button class="btn BMCA_btn" style="font-size:15px;" type="submit">Done</button>
+        </form>
+    </div>
+</div>

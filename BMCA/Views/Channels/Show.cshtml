@@ -4,20 +4,23 @@
 
 @model Channel
 
-<div class="mt-5" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+<div class="mt-5 BMCA_sitecard" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
     <div>
         <div>
             <div class="d-flex justify-content-between">
                 <h5>Chats</h5>
-                <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
+                <div>
+                    <a class="bi bi-plus-circle" style="color: white; font-size: 20px;" href="/Channels/New"></a>
+                    <a class="bi bi-person-fill" style="color: white; font-size: 20px;" href="/Users/Show/@MyUserManager.GetUserId(User).ToString()"></a>
+                </div>
             </div>
+            <hr class="mt-0"/>
             <div>
                 <form action="/Channels/Show/@Model.ID" method="get">
                     @Html.TextBox("_Search")
-                    <button type="submit">Search</button>
+                    <button class="bi bi-search" type="submit"></button>
                 </form>
             </div>
-            <hr / class="mt-0">
 
             <div class="d-inline-block">
                 @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)

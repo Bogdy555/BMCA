@@ -1,5 +1,8 @@
 ﻿@model BMCA.Models.Channel
 
-<div class="mb-3 d-flex justify-content-center align-content-center BMCA_chat">
-    <a class="BMCA_btn btn btn-block" href="/Channels/Show/@Model.ID">@Model.Name</a>
-</div>
+<a href="/Channels/Show/@Model.ID">
+    <div class="mb-3 d-flex justify-content-start BMCA_chat">
+        <i class="bi bi-chat "></i>
+        <p>@Model.Name</p>
+    </div>
+</a>
