@@ -37,11 +37,11 @@ namespace BMCA.Data
                 new ApplicationUser
                 {
                     Id = _GUID_Admin,
-                    UserName = "Admin",
+                    UserName = "admin@test.com",
                     EmailConfirmed = true,
                     NormalizedEmail = "ADMIN@TEST.COM",
                     Email = "admin@test.com",
-                    NormalizedUserName = "ADMIN",
+                    NormalizedUserName = "ADMIN@TEST.COM",
                     PasswordHash = _Hasher.HashPassword(null, "Parola_2")
                 }
             );
