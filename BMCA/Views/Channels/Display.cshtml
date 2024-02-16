@@ -1,0 +1,46 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Channel
+
+<div class="mt-5" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+    <div>
+        <div>
+            <div class="d-flex justify-content-between">
+                <h5>Chats</h5>
+                <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
+            </div>
+            <div>
+                <form action="/Channels/Display/@Model.ID" method="get">
+                    @Html.TextBox("_Search")
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <hr / class="mt-0">
+
+            <div class="d-inline-block">
+                @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
+                {
+                    @Html.Partial("ChannelButton", _Channel)
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <h1>@Model.Name</h1>
+            <br />
+            <p>@Model.Category.Name</p>
+            <br />
+            <p>@Model.Description</p>
+            <br />
+            @foreach (ApplicationUser _Member in ViewBag.AllMembers)
+            {
+                <div>
+                    <p>@_Member.UserName</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

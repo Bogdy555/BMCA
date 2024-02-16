@@ -79,6 +79,116 @@ namespace BMCA.Controllers
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]
+		public IActionResult Display(int _ID, string? _Search)
+		{
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Include("Category").Where(m => m.ID == _ID).First();
+
+			if (_Channel == null || _Channel.BindsChannelUser == null || _Channel.Category == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Could not find the channel!" });
+			}
+
+			bool _Found = false;
+
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			{
+				if (_Bind.UserId == MyUserManager.GetUserId(User))
+				{
+					_Found = true;
+				}
+			}
+
+			if (!_Found)
+			{
+				return Redirect("/Users/Show/" + MyUserManager.GetUserId(User));
+			}
+
+			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
+				.Where(_BindChannelUser => _BindChannelUser.UserId == MyUserManager.GetUserId(User))
+				.ToList();
+
+			List<int> _ChannelIds = new List<int>();
+			foreach (BindChannelUser _Bind in _BindChannelUser)
+			{
+				_ChannelIds.Add(_Bind.ChannelId);
+			}
+
+			if (_Search == null)
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.ToList();
+			}
+			else
+			{
+				ViewBag.UserChannels = MyDataBase.Channels
+					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
+					.Where(_Channel => _Channel.Name.ToUpper().Contains(_Search.ToUpper()))
+					.ToList();
+			}
+
+			List<ApplicationUser> _AllMembers = new List<ApplicationUser>();
+
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			{
+				ApplicationUser? _Member = MyDataBase.AppUsers.Find(_Bind.UserId);
+
+				if (_Member == null)
+				{
+					continue;
+				}
+
+				_AllMembers.Add(_Member);
+			}
+
+			ViewBag.AllMembers = _AllMembers;
+
+			return View(_Channel);
+		}
+
+		[Authorize(Roles = "User,Moderator,Admin")]
+		[HttpPost]
+		public IActionResult RemoveMemer(int _ID, int? _UserId)
+		{
+			// TO DO
+
+			if (_UserId == null)
+			{
+				return Redirect("/Channels/Display/" + _ID);
+			}
+
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ID).First();
+
+			if (_Channel == null || _Channel.BindsChannelUser == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Can't remove a member from an unexisting channel!" });
+			}
+
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			{
+				if (_Bind.IsOwner)
+				{
+					if (_Bind.UserId != MyUserManager.GetUserId(User))
+					{
+						return Redirect("/Channels/Display/" + _ID);
+					}
+
+					break;
+				}
+			}
+
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			{
+				if (_Bind.UserId != MyUserManager.GetUserId(User))
+				{
+					return Redirect("/Channels/Display/" + _ID);
+				}
+			}
+
+			return Redirect("/Channels/Display/" + _ID);
+		}
+
+		[Authorize(Roles = "User,Moderator,Admin")]
 		public IActionResult New()
 		{
 			ViewBag.CategoriesList = GetAllCategories();
