@@ -14,6 +14,17 @@
         border-color: transparent;
     }
 
+.BMCA_btn_del {
+    background-color: #6D0000;
+    color: white;
+    font-size: 30px;
+}
+
+.BMCA_btn_del:hover {
+    background-color: #C82B28;
+    color: white;
+}
+
 .BMCA_card {
     margin: 0 150px;
     background-color: #2f2159;
@@ -63,9 +74,10 @@
     text-decoration: none;
 }
 
-html {
-    font-size: 14px;
-}
+
+    .BMCA_back:hover {
+        color: white;
+    }
 
 @media (min-width: 768px) {
     html {
@@ -93,6 +105,7 @@ html {
 }
 
 html {
+    font-size: 14px;
     position: relative;
     min-height: 100%;
 }

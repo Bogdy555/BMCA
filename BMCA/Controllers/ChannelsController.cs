@@ -246,11 +246,11 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.IsOwner)
-				{
-					if (_Bind.UserId != MyUserManager.GetUserId(User))
-					{
-						return Redirect("/Channels/Show/" + _ID);
+                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
+                    {
+                        return Redirect("/Channels/Show/" + _ID);
 					}
 
 					break;
@@ -277,11 +277,11 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _OriginalChannel.BindsChannelUser)
 			{
-				if (_Bind.IsOwner)
-				{
-					if (_Bind.UserId != MyUserManager.GetUserId(User))
-					{
-						return Redirect("/Channels/Show/" + _ID);
+                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
+                    {
+                        return Redirect("/Channels/Show/" + _ID);
 					}
 
 					break;
@@ -303,7 +303,7 @@ namespace BMCA.Controllers
 
 				MyDataBase.SaveChanges();
 
-				return Redirect("/Channels/Show/" + _ID);
+				return Redirect("/Channels/Display/" + _ID);
 			}
 			catch
 			{
@@ -324,11 +324,11 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.IsOwner)
-				{
-					if (_Bind.UserId != MyUserManager.GetUserId(User))
-					{
-						return Redirect("/Channels/Show/" + _ID);
+                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                {
+                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
+                    {
+                        return Redirect("/Channels/Show/" + _ID);
 					}
 
 					break;

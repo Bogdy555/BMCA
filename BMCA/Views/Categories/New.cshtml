@@ -6,8 +6,8 @@
     ViewData["Title"] = "New Category";
 }
 
-<div class="mt-5 BMCA_sitecard">
-    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Categories/List"></a>
+<div class="mt-5 BMCA_sitecard" style="padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000))">
+    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px" href="/Categories/List"></a>
     <div class="mt-2" style="text-align:center">
         <h1 style="margin:0 20px">@ViewData["Title"]</h1>
     </div>
@@ -19,7 +19,11 @@
             @Html.Label("Name", "Name: ")
             @Html.TextBox("Name")
             @Html.ValidationMessage("Name")
-            <button class="btn BMCA_btn" style="font-size:15px;" type="submit">Done</button>
+
+            <br />
+            <br />
+
+            <button class="btn BMCA_btn" style="font-size:20px;" type="submit">Done</button>
         </form>
     </div>
 </div>

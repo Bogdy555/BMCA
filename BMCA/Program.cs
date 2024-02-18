@@ -58,6 +58,7 @@ app.MapControllerRoute(name: "UsersList", pattern: "Users/List", defaults: new {
 app.MapControllerRoute(name: "UsersShow", pattern: "Users/Show/{_ID}", defaults: new { controller = "Users", action = "Show" });
 app.MapControllerRoute(name: "UsersDelete", pattern: "Users/Delete/{_ID}", defaults: new { controller = "Users", action = "Delete" });
 app.MapControllerRoute(name: "UsersPromote", pattern: "Users/Promote/{_ID}", defaults: new { controller = "Users", action = "Promote" });
+app.MapControllerRoute(name: "UsersDemote", pattern: "Users/Demote/{_ID}", defaults: new { controller = "Users", action = "Demote" });
 
 app.MapControllerRoute(name: "MessagesNew", pattern: "Messages/New", defaults: new { controller = "Messages", action = "New" });
 app.MapControllerRoute(name: "MessagesEdit", pattern: "Messages/Edit/{_ID}", defaults: new { controller = "Messages", action = "Edit" });

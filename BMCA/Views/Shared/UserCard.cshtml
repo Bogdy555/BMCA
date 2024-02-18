@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model BMCA.Models.ApplicationUser
+@inject UserManager<ApplicationUser> MyUserManager
+
+@{
+    string _UserName = Model.UserName;
+    _UserName = _UserName.Split("@")[0];
+    _UserName = _UserName[0].ToString().ToUpper() + _UserName.Substring(1);
+
+    var _User = await MyUserManager.FindByIdAsync(Model.Id);
+    IList<string> _Roles = await MyUserManager.GetRolesAsync(_User);
+    string _Role = _Roles[0];
+}
+
+@if (Model.Id != MyUserManager.GetUserId(User))
+{
+    <div class="card m-3 p-4" style="background: #292558;">
+        <h2 class="mb-0">@_UserName</h2>
+        
+        <hr>
+
+        <h5 class="text-muted mb-3">Role: @_Role</h5>
+        <div class="d-flex justify-content-start">
+            @if (_Role == "User")
+            {
+                <form action="/Users/Promote/@Model.Id" method="post" style="margin-right: 5px">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Make Moderator</button>
+                </form>
+            }
+            else if (_Role == "Moderator")
+            {
+                <form action="/Users/Demote/@Model.Id" method="post" style="margin-right: 5px">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Make User</button>
+                </form>
+                <form action="/Users/Promote/@Model.Id" method="post" style="margin-right: 5px">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Make Admin</button>
+                </form>
+            }
+            else if(_Role == "Admin")
+            {
+                <form action="/Users/Demote/@Model.Id" method="post" style="margin-right: 5px">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Make Moderator</button>
+                </form>
+            }
+
+            <form action="/Users/Delete/@Model.Id" method="post">
+                <button class="btn BMCA_btn_del" style="font-size: 15px" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+}

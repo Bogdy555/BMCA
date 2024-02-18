@@ -27,7 +27,7 @@ namespace BMCA.Controllers
 		[Authorize(Roles = "Admin")]
 		public IActionResult List()
 		{
-			ViewBag.Users = MyDataBase.AppUsers;
+			ViewBag.Users = MyUserManager.Users.ToList();
 
 			if (TempData.ContainsKey("Message"))
 			{
@@ -118,9 +118,24 @@ namespace BMCA.Controllers
 
 			var _OldRole = await MyUserManager.GetRolesAsync(_User);
 
-			var _Role = await MyRoleManager.FindByNameAsync("Moderator");
+            string _NewRole = "";
+            if (_OldRole.Contains("User"))
+            {
+                _NewRole = "Moderator";
+            }
+            else if (_OldRole.Contains("Moderator"))
+            {
+                _NewRole = "Admin";
+            }
+            else
+            {
+                return View("Error", new ErrorViewModel { RequestId = "User is already an admin!" });
+            }
 
-			if(_Role == null)
+            var _Role = await MyRoleManager.FindByNameAsync(_NewRole);
+
+
+            if (_Role == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Role not found" });
 			}
@@ -137,7 +152,49 @@ namespace BMCA.Controllers
 			{
 				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to promote a user. Please contact the dev team in order to resolve this issue." } );
 			}
+        }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Demote(string _ID)
+        {
+            var _User = await MyUserManager.FindByIdAsync(_ID);
+
+            var _OldRole = await MyUserManager.GetRolesAsync(_User);
+
+            string _NewRole = "";
+            if (_OldRole.Contains("Moderator"))
+            {
+                _NewRole = "User";
+            }
+            else if (_OldRole.Contains("Admin"))
+            {
+                _NewRole = "Moderator";
+            }
+            else
+            {
+                return View("Error", new ErrorViewModel { RequestId = "Already a user, cannot demote it no more!" });
+            }
+
+            var _Role = await MyRoleManager.FindByNameAsync(_NewRole);
+
+            if (_Role == null)
+            {
+                return View("Error", new ErrorViewModel { RequestId = "Role not found" });
+            }
+
+            try
+            {
+                await MyUserManager.RemoveFromRolesAsync(_User, _OldRole);
+
+                await MyUserManager.AddToRoleAsync(_User, _Role.Name);
+
+                return RedirectToAction("List");
+            }
+            catch
+            {
+                return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to demote a user. Please contact the dev team in order to resolve this issue." });
+            }
         }
 	}
 
