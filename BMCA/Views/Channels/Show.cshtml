@@ -36,19 +36,70 @@
             {
                 if (_Message.UserId == MyUserManager.GetUserId(User))
                 {
-                    <p style="text-align: right">@_Message.Content</p>
+                    <h3 style="text-align: right">@_Message.User.UserName</h3>
+                    <form action="/Messages/Edit/@_Message.ID" method="get">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="/Messages/Delete/@_Message.ID" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                    if (_Message.FilePath != null && _Message.FileType != null)
+                    {
+                        if (_Message.FileType.Contains("image"))
+                        {
+                            <img width="100" height="100" src="@_Message.FilePath" alt="Image not found" />
+                        }
+                        else if (_Message.FileType.Contains("video"))
+                        {
+                            <video width="100" height="100" controls>
+                                <source src="@_Message.FilePath" type="@_Message.FileType" />
+                            </video>
+                        }
+                    }
+                    if (_Message.Content != null)
+                    {
+                        <p style="text-align: right">@_Message.Content</p>
+                    }
                     <p style="text-align: right">@_Message.Date</p>
                 }
                 else
                 {
-                    <p>@_Message.Content</p>
+                    <h3>@_Message.User.UserName</h3>
+                    if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+                    {
+                        <form action="/Messages/Edit/@_Message.ID" method="get">
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form action="/Messages/Delete/@_Message.ID" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    }
+                    if (_Message.FilePath != null && _Message.FileType != null)
+                    {
+                        if (_Message.FileType.Contains("image"))
+                        {
+                            <img width="100" height="100" src="@_Message.FilePath" alt="Image not found" />
+                        }
+                        else if (_Message.FileType.Contains("video"))
+                        {
+                            <video width="100" height="100" controls>
+                                <source src="@_Message.FilePath" type="@_Message.FileType" />
+                            </video>
+                        }
+                    }
+                    if (_Message.Content != null)
+                    {
+                        <p>@_Message.Content</p>
+                    }
                     <p>@_Message.Date</p>
                 }
             }
         </div>
         <div>
-            <form action="/Messages/New?_ChannelId=@Model.ID" method="post">
+            <form action="/Messages/New" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_Message.ChannelId" value="@Model.ID" />
                 @Html.TextBox("_Message.Content")
+                <input type="file" name="_File" />
                 <button type="submit">Send</button>
             </form>
         </div>
