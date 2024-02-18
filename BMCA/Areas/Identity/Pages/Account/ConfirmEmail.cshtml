@@ -1,0 +1,18 @@
+﻿@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+    ViewData["BodyClass"] = "custom-body-class";
+    ViewData["BodyStyle"] = "background: linear-gradient(to bottom, #161235, #242050, #24243e);";
+}
+
+<div class="card row BMCA_card mt-5" style="height: 50vh">
+    <section>
+        <h1 class="text-center mt-5">@ViewData["Title"]</h1>
+        <hr />
+        <partial name="_StatusMessage" model="Model.StatusMessage" />
+        <p class="text-center mt-5">
+            Return to the <a href="/../../..">login page</a>
+        </p>
+    </section>
+</div>

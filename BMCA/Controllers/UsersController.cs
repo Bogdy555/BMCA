@@ -50,7 +50,11 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null)
+			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
+            {
+                ViewBag.UserChannels = MyDataBase.Channels;
+			}
+			else if (_Search == null)
 			{
 				ViewBag.UserChannels = MyDataBase.Channels
 					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
@@ -103,6 +107,33 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to delete the user. Please contact the dev team in order to resolve this issue." } );
 			}
 		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		public IActionResult Promote(string _ID)
+		{
+            ApplicationUser? _PromoteUser = MyDataBase.AppUsers.Find(_ID);
+
+            if (_PromoteUser == null)
+			{
+                return View("Error", new ErrorViewModel { RequestId = "Promote attempt on non existing user!" });
+            }
+
+			if (_PromoteUser.Id != MyUserManager.GetUserId(User) && !User.IsInRole("Admin"))
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Permission denied!" });
+			}
+
+			try
+			{
+
+                return RedirectToAction("List");
+            }
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to promote a user. Please contact the dev team in order to resolve this issue." } );
+            }
+        }
 	}
 
 }

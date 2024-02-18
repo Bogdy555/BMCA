@@ -8,7 +8,7 @@
     ViewData["Title"] = "List Users";
 }
 
-<div class="mt-5 BMCA_sitecard">
+<div class="mt-5 BMCA_sitecard" style="padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000)">
     <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Users/Show/@MyUserManager.GetUserId(User)"></a>
     <div class="mt-2" style="text-align:center">
         <h1 style="margin:0 20px">@ViewData["Title"]</h1>
@@ -26,8 +26,11 @@
             <div class="card m-3 p-4" style="background: #292558;">
                 <h2 class="mb-0">@_Elem.UserName</h2>
                 <hr>
+                <form action="/Users/Promote/@_Elem.Id" method="post">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Make Moderator</button>
+                </form>
                 <form action="/Users/Delete/@_Elem.Id" method="post">
-                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Delete</button>
+                    <button class="btn BMCA_btn" style="font-size: 15px; background-color: #6d0000" type="submit">Delete</button>
                 </form>
             </div>
         }

@@ -4,35 +4,32 @@
 
 @model Channel
 
-<div class="mt-5 BMCA_sitecard" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
-    <div>
-        <div>
-            <div class="d-flex justify-content-between">
-                <h5>Chats</h5>
-                <div>
-                    <a class="bi bi-plus-circle" style="color: white; font-size: 20px;" href="/Channels/New"></a>
-                    <a class="bi bi-person-fill" style="color: white; font-size: 20px;" href="/Users/Show/@MyUserManager.GetUserId(User).ToString()"></a>
-                </div>
-            </div>
-            <hr class="mt-0"/>
-            <div>
-                <form action="/Channels/Show/@Model.ID" method="get">
-                    @Html.TextBox("_Search")
-                    <button class="bi bi-search" type="submit"></button>
-                </form>
-            </div>
-
-            <div class="d-inline-block">
-                @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
-                {
-                    @Html.Partial("ChannelButton", _Channel)
-                }
+<div class="mt-5 BMCA_sitecard" style="margin: 0; display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+    <div style="border-right: 2px solid #464a67; padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000));">
+        <div class="d-flex justify-content-between" style="border-bottom: 2px solid #464a67; padding-bottom: 3px">
+            <h2 style="margin: 1rem">Chats</h2>
+            <div style="margin: 1rem">
+                <a class="bi bi-plus-circle" style="color: white; font-size: 27px; margin-right: 5px" href="/Channels/New"></a>
+                <a class="bi bi-person-fill" style="color: white; font-size: 27px" href="/Users/Show/@MyUserManager.GetUserId(User).ToString()"></a>
             </div>
         </div>
+        <div class="text-center" style="margin: 1rem 0">
+            <form action="/Users/Show/@Model.ID" method="get">
+                @Html.TextBox("_Search")
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
+        {
+            @Html.Partial("ChannelButton", _Channel)
+        }
     </div>
-    <div>
-        <div>
-            <h1>@Model.Name</h1>
+
+    <div style="border-left: 2px solid #464a67; padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000))">
+        <div class="d-flex justify-content-between" style="border-bottom: 2px solid #464a67; padding-bottom: 3px">
+            <h2 style="margin: 1rem">@Model.Name</h2>
+            <a class="bi bi-three-dots-vertical" style="color: white; font-size: 27px; margin: 1rem" href="/Channels/Display/@Model.ID"></a>
         </div>
         <div>
             @foreach (Message _Message in ViewBag.ChatMessages)

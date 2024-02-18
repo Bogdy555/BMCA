@@ -24,18 +24,21 @@
 
 .BMCA_chat {
     background-color: #292558;
+    border: 1px solid #1f163b;
     border-radius: 5px;
-    padding: 10px 150px;
-    margin: 10px 0px;
+    padding: 10px 15px;
+    margin: 1px 0px;
+}
+
+.BMCA_chat:hover {
+    color: white;
 }
 
 .BMCA_sitecard {
     margin: 0 50px;
     background-color: #242050;
     padding: 0;
-    border-radius: 20px;
     box-shadow: 0 26px 42px rgb(38, 27, 72);
-    padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 -  1000));
 }
 
 .BMCA_subcard {

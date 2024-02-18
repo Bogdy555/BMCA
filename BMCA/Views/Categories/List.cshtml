@@ -8,7 +8,7 @@
     ViewData["Title"] = "List Categories";
 }
 
-<div class="mt-5 BMCA_sitecard">
+<div class="mt-5 BMCA_sitecard" style="padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000)">
     <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px;" href="/Users/Show/@MyUserManager.GetUserId(User)"></a>
     <div class="d-flex justify-content-between mt-2" style="margin: 0 20px">
         <h1 style="margin:0 20px">@ViewData["Title"]</h1>
@@ -30,7 +30,7 @@
             <div class="d-flex justify-content-start">
                 <a class="btn BMCA_btn" style="font-size: 15px; margin-right: 5px;" href="/Categories/Edit/@_Elem.ID">Edit</a>
                 <form action="/Categories/Delete/@_Elem.ID" method="post">
-                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Delete</button>
+                    <button class="btn BMCA_btn" style="font-size: 15px; background-color: #6d0000" type="submit">Delete</button>
                 </form>
             </div>
         </div>

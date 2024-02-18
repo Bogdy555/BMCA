@@ -37,7 +37,7 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User))
+				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin"))
 				{
 					_Found = true;
 					break;
@@ -59,7 +59,11 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null)
+			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
+            {
+                ViewBag.UserChannels = MyDataBase.Channels;
+			}
+			else if (_Search == null)
 			{
 				ViewBag.UserChannels = MyDataBase.Channels
 					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))
@@ -92,9 +96,10 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User))
+				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin"))
 				{
 					_Found = true;
+					ViewBag.Owner = _Bind.UserId;
 				}
 			}
 
@@ -113,7 +118,11 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null)
+			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
+            {
+                ViewBag.UserChannels = MyDataBase.Channels;
+			}
+			else if (_Search == null)
 			{
 				ViewBag.UserChannels = MyDataBase.Channels
 					.Where(_Channel => _ChannelIds.Contains(_Channel.ID))

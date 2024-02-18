@@ -4,43 +4,63 @@
 
 @model Channel
 
-<div class="mt-5" style="display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
-    <div>
-        <div>
-            <div class="d-flex justify-content-between">
-                <h5>Chats</h5>
-                <a class="bi bi-plus-circle" style="color: white" href="/Channels/New"></a>
-            </div>
-            <div>
-                <form action="/Channels/Display/@Model.ID" method="get">
-                    @Html.TextBox("_Search")
-                    <button type="submit">Search</button>
-                </form>
-            </div>
-            <hr / class="mt-0">
-
-            <div class="d-inline-block">
-                @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
-                {
-                    @Html.Partial("ChannelButton", _Channel)
-                }
+<div class="mt-5 BMCA_sitecard" style="margin: 0; display: grid; grid-template-columns: 1fr 3fr; grid-template-rows: 1fr;">
+    <div style="border-right: 2px solid #464a67; padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000));">
+        <div class="d-flex justify-content-between" style="border-bottom: 2px solid #464a67; padding-bottom: 3px">
+            <h2 style="margin: 1rem">Chats</h2>
+            <div style="margin: 1rem">
+                <a class="bi bi-plus-circle" style="color: white; font-size: 27px; margin-right: 5px" href="/Channels/New"></a>
+                <a class="bi bi-person-fill" style="color: white; font-size: 27px" href="/Users/Show/@MyUserManager.GetUserId(User).ToString()"></a>
             </div>
         </div>
+        <div class="text-center" style="margin: 1rem 0">
+            <form action="/Users/Show/@Model.ID" method="get">
+                @Html.TextBox("_Search")
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        @foreach (BMCA.Models.Channel _Channel in ViewBag.UserChannels)
+        {
+            @Html.Partial("ChannelButton", _Channel)
+        }
     </div>
-    <div>
-        <div>
-            <h1>@Model.Name</h1>
-            <br />
-            <p>@Model.Category.Name</p>
-            <br />
-            <p>@Model.Description</p>
-            <br />
+    
+    <div style="border-left: 2px solid #464a67; padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000))">
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Moderator") || MyUserManager.GetUserId(User) == ViewBag.Owner)
+        {
+            <div class="d-flex justify-content-between" style="border-bottom: 2px solid #464a67">
+                <h2 style="margin: 1rem">@Model.Name</h2>
+                <div class="d-flex">
+                    <a class="btn BMCA_btn" style="font-size: 20px; margin: 1rem" href="/Channels/Edit/@Model.ID">Edit</a>
+                    <form action="/Channels/Delete/@Model.ID" method="post">
+                        <button class="btn BMCA_btn" style="font-size: 20px; margin: 1rem 1rem 1rem 0rem; background-color: #6d0000" type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between" style="border-bottom: 2px solid #464a67; padding-bottom: 5.5px">
+                <h2 style="margin: 1rem">@Model.Name</h2>
+            </div>
+        }
+
+        <section style="margin: 1rem">
+            <h4>About</h4>
+            <hr />
+            <p><strong>Description:</strong> <span>@Model.Description</span></p>
+            <p><strong>Category:</strong> <span>@Model.Category.Name</span></p>
+
+            <h4 class="mt-4">Members of the chat</h>
+            <hr />
             @foreach (ApplicationUser _Member in ViewBag.AllMembers)
             {
                 <div>
                     <p>@_Member.UserName</p>
                 </div>
             }
-        </div>
+        </section>
     </div>
 </div>
