@@ -29,9 +29,9 @@ namespace BMCA.Controllers
 
 		[Authorize(Roles = "User,Moderator,Admin")]
 		[HttpPost]
-		public IActionResult New(Message _Message, int _ChannelId, IFormFile? _File)
+		public IActionResult New(Message _Message, IFormFile? _File)
 		{
-			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ChannelId).First();
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _Message.ChannelId).First();
 
 			if (_Channel == null || _Channel.BindsChannelUser == null)
 			{
@@ -56,7 +56,6 @@ namespace BMCA.Controllers
 
 			_Message.Date = DateTime.Now;
 			_Message.UserId = MyUserManager.GetUserId(User);
-			_Message.ChannelId = _ChannelId;
 
 			if (_File != null)
 			{
@@ -115,7 +114,7 @@ namespace BMCA.Controllers
 
 				MyDataBase.SaveChanges();
 
-				return Redirect("/Channels/Show/" + _ChannelId);
+				return Redirect("/Channels/Show/" + _Message.ChannelId);
 			}
 			catch
 			{
@@ -124,8 +123,26 @@ namespace BMCA.Controllers
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]
+		public IActionResult Edit(int _ID)
+		{
+			Message? _Message = MyDataBase.Messages.Find(_ID);
+
+			if (_Message == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing message!" });
+			}
+
+			if (_Message.UserId != MyUserManager.GetUserId(User) && !User.IsInRole("Admin") && !User.IsInRole("Moderator"))
+			{
+				return View("Error", "Access denied!");
+			}
+
+			return View(_Message);
+		}
+
+		[Authorize(Roles = "User,Moderator,Admin")]
 		[HttpPost]
-		public IActionResult Edit(int _ID, Message _Message)
+		public IActionResult Edit(int _ID, Message _Message, IFormFile? _File)
 		{
 			_Message.ID = _ID;
 
@@ -136,20 +153,69 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing message!" });
 			}
 
-			if (_OriginalMessage.UserId != MyUserManager.GetUserId(User))
+			if (_OriginalMessage.UserId != MyUserManager.GetUserId(User) && !User.IsInRole("Moderator") && !User.IsInRole("Admin"))
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Access denied" });
 			}
 
-			if (!ModelState.IsValid)
+			_Message.UserId = _OriginalMessage.UserId;
+
+			if (_File != null)
 			{
-				return Redirect("/Channels/Show/" + _OriginalMessage.ChannelId);
+				if (_File.Length == 0)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "No empty files allowed here!" });
+				}
+
+				try
+				{
+					if (!Directory.Exists(Path.Combine(WebEnv.WebRootPath, "media")))
+					{
+						Directory.CreateDirectory(Path.Combine(WebEnv.WebRootPath, "media"));
+					}
+
+					string _FileName = BitConverter.ToString(System.Security.Cryptography.SHA256.Create().ComputeHash(_File.OpenReadStream())).Replace("-", "").ToLowerInvariant() + Path.GetExtension(_File.FileName);
+
+					FileStream _FileStream = new FileStream(Path.Combine(WebEnv.WebRootPath, "media", _FileName), FileMode.Create);
+
+					_File.CopyTo(_FileStream);
+
+					_FileStream.Close();
+
+					if (_File.ContentType.Contains("image"))
+					{
+						_Message.FilePath = "/media/" + _FileName;
+						_Message.FileType = "image/" + Path.GetExtension(_FileName).Remove(0, 1);
+					}
+					else if (_File.ContentType.Contains("video"))
+					{
+						_Message.FilePath = "/media/" + _FileName;
+						_Message.FileType = "video/" + Path.GetExtension(_FileName).Remove(0, 1);
+					}
+					else
+					{
+						return View("Error", new ErrorViewModel { RequestId = "Only images and videos allowed" });
+					}
+				}
+				catch
+				{
+					return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to add the message. Please contact the dev team in order to resolve this issue." });
+				}
+			}
+
+			ModelState.Clear();
+			TryValidateModel(_Message);
+
+			if (!ModelState.IsValid || (_Message.Content == null && _File == null))
+			{
+				return View(_Message);
 			}
 
 			try
 			{
 				_OriginalMessage.Content = _Message.Content;
-				_OriginalMessage.Date = DateTime.Now;
+				_OriginalMessage.FilePath = _Message.FilePath;
+				_OriginalMessage.FileType = _Message.FileType;
 
 				MyDataBase.SaveChanges();
 
@@ -170,6 +236,11 @@ namespace BMCA.Controllers
 			if (_Message == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Delete attempt on non existing message!" });
+			}
+
+			if (!User.IsInRole("Admin") && !User.IsInRole("Moderator") && _Message.UserId != MyUserManager.GetUserId(User))
+			{
+				return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
 			}
 
 			try

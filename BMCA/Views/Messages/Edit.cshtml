@@ -1,0 +1,16 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Message
+
+@{
+    ViewData["Title"] = "Edit Message";
+}
+
+<form action="/Messages/Edit/@Model.ID" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_Message.ChannelId" value="@Model.ChannelId" />
+    @Html.TextBox("_Message.Content")
+    <input type="file" name="_File" />
+    <button type="submit">Send</button>
+</form>

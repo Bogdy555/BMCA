@@ -37,6 +37,12 @@
                 if (_Message.UserId == MyUserManager.GetUserId(User))
                 {
                     <h3 style="text-align: right">@_Message.User.UserName</h3>
+                    <form action="/Messages/Edit/@_Message.ID" method="get">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="/Messages/Delete/@_Message.ID" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
                     if (_Message.FilePath != null && _Message.FileType != null)
                     {
                         if (_Message.FileType.Contains("image"))
@@ -59,6 +65,15 @@
                 else
                 {
                     <h3>@_Message.User.UserName</h3>
+                    if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+                    {
+                        <form action="/Messages/Edit/@_Message.ID" method="get">
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form action="/Messages/Delete/@_Message.ID" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    }
                     if (_Message.FilePath != null && _Message.FileType != null)
                     {
                         if (_Message.FileType.Contains("image"))
@@ -82,7 +97,7 @@
         </div>
         <div>
             <form action="/Messages/New" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_ChannelId" value="@Model.ID" />
+                <input type="hidden" name="_Message.ChannelId" value="@Model.ID" />
                 @Html.TextBox("_Message.Content")
                 <input type="file" name="_File"/>
                 <button type="submit">Send</button>
