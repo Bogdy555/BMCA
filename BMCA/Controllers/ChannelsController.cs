@@ -26,7 +26,7 @@ namespace BMCA.Controllers
 		[Authorize(Roles = "User,Moderator,Admin")]
 		public IActionResult Show(int _ID, string? _Search)
 		{
-			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Include("Messages").Where(m => m.ID == _ID).First();
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Include("Messages").Include("Messages.User").Where(m => m.ID == _ID).First();
 
 			if (_Channel == null || _Channel.BindsChannelUser == null || _Channel.Messages == null)
 			{

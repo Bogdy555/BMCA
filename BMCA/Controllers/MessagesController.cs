@@ -16,18 +16,20 @@ namespace BMCA.Controllers
 		private readonly UserManager<ApplicationUser> MyUserManager;
 		private readonly RoleManager<IdentityRole> MyRoleManager;
 		private readonly SignInManager<ApplicationUser> MySignInManager;
+		private readonly IWebHostEnvironment WebEnv;
 
-		public MessagesController(ApplicationDbContext _MyDataBase, UserManager<ApplicationUser> _MyUserManager, RoleManager<IdentityRole> _MyRoleManager, SignInManager<ApplicationUser> _MySignInManager)
+		public MessagesController(ApplicationDbContext _MyDataBase, UserManager<ApplicationUser> _MyUserManager, RoleManager<IdentityRole> _MyRoleManager, SignInManager<ApplicationUser> _MySignInManager, IWebHostEnvironment _WebEnv)
 		{
 			MyDataBase = _MyDataBase;
 			MyUserManager = _MyUserManager;
 			MyRoleManager = _MyRoleManager;
 			MySignInManager = _MySignInManager;
+			WebEnv = _WebEnv;
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]
 		[HttpPost]
-		public IActionResult New(Message _Message, int _ChannelId)
+		public IActionResult New(Message _Message, int _ChannelId, IFormFile? _File)
 		{
 			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ChannelId).First();
 
@@ -56,12 +58,55 @@ namespace BMCA.Controllers
 			_Message.UserId = MyUserManager.GetUserId(User);
 			_Message.ChannelId = _ChannelId;
 
+			if (_File != null)
+			{
+				if (_File.Length == 0)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "No empty files allowed here!" });
+				}
+
+				try
+				{
+					if (!Directory.Exists(Path.Combine(WebEnv.WebRootPath, "media")))
+					{
+						Directory.CreateDirectory(Path.Combine(WebEnv.WebRootPath, "media"));
+					}
+
+					string _FileName = BitConverter.ToString(System.Security.Cryptography.SHA256.Create().ComputeHash(_File.OpenReadStream())).Replace("-", "").ToLowerInvariant() + Path.GetExtension(_File.FileName);
+
+					FileStream _FileStream = new FileStream(Path.Combine(WebEnv.WebRootPath, "media", _FileName), FileMode.Create);
+
+					_File.CopyTo(_FileStream);
+
+					_FileStream.Close();
+
+					if (_File.ContentType.Contains("image"))
+					{
+						_Message.FilePath = "/media/" + _FileName;
+						_Message.FileType = "image/" + Path.GetExtension(_FileName).Remove(0, 1);
+					}
+					else if (_File.ContentType.Contains("video"))
+					{
+						_Message.FilePath = "/media/" + _FileName;
+						_Message.FileType = "video/" + Path.GetExtension(_FileName).Remove(0, 1);
+					}
+					else
+					{
+						return View("Error", new ErrorViewModel { RequestId = "Only images and videos allowed" });
+					}
+				}
+				catch
+				{
+					return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to add the message. Please contact the dev team in order to resolve this issue." });
+				}
+			}
+
 			ModelState.Clear();
 			TryValidateModel(_Message);
 
-			if (!ModelState.IsValid)
+			if (!ModelState.IsValid || (_Message.Content == null && _File == null))
 			{
-				return View(_Message);
+				return Redirect("/Channels/Show/" + _Message.ChannelId);
 			}
 
 			try

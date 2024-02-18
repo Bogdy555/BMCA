@@ -121,7 +121,7 @@ namespace BMCA.Controllers
 			if(_Role == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Role not found" });
-            }
+			}
 
 			try
 			{

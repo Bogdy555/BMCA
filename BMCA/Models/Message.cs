@@ -9,10 +9,15 @@ namespace BMCA.Models
         [Key]
         public int ID { get; set; }
 
-        [Required]
         [MinLength(1, ErrorMessage = "")]
         [StringLength(100, ErrorMessage = "What a log message you want to send...")]
-        public string Content { get; set; }
+        public string? Content { get; set; }
+
+        [StringLength(100, ErrorMessage = "What a long file name...")]
+        public string? FilePath { get; set; }
+
+        [StringLength(100, ErrorMessage = "What a long file type...")]
+        public string? FileType { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
