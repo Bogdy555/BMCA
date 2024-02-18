@@ -100,6 +100,8 @@ namespace BMCA.Controllers
 
 				MyDataBase.SaveChanges();
 
+				TempData["TempMsg"] = "User deleted!";
+
 				return RedirectToAction("List");
 			}
 			catch
