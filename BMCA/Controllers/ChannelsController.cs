@@ -37,7 +37,7 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin"))
+				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin") || User.IsInRole("Moderator"))
 				{
 					_Found = true;
 					break;
@@ -96,7 +96,7 @@ namespace BMCA.Controllers
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin"))
+				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin") || User.IsInRole("Moderator"))
 				{
 					_Found = true;
 					ViewBag.Owner = _Bind.UserId;

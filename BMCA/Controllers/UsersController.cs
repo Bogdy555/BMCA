@@ -110,29 +110,32 @@ namespace BMCA.Controllers
 
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
-		public IActionResult Promote(string _ID)
+		public async Task<IActionResult> Promote(string _ID)
 		{
-            ApplicationUser? _PromoteUser = MyDataBase.AppUsers.Find(_ID);
+			var _User = await MyUserManager.FindByIdAsync(_ID);
 
-            if (_PromoteUser == null)
+			var _OldRole = await MyUserManager.GetRolesAsync(_User);
+
+			var _Role = await MyRoleManager.FindByNameAsync("Moderator");
+
+			if(_Role == null)
 			{
-                return View("Error", new ErrorViewModel { RequestId = "Promote attempt on non existing user!" });
+				return View("Error", new ErrorViewModel { RequestId = "Role not found" });
             }
-
-			if (_PromoteUser.Id != MyUserManager.GetUserId(User) && !User.IsInRole("Admin"))
-			{
-				return View("Error", new ErrorViewModel { RequestId = "Permission denied!" });
-			}
 
 			try
 			{
+				await MyUserManager.RemoveFromRolesAsync(_User, _OldRole);
 
-                return RedirectToAction("List");
-            }
+				await MyUserManager.AddToRoleAsync(_User, _Role.Name);
+
+				return RedirectToAction("List");
+			} 
 			catch
 			{
 				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to promote a user. Please contact the dev team in order to resolve this issue." } );
-            }
+			}
+
         }
 	}
 

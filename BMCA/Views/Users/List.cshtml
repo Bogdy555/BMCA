@@ -23,6 +23,7 @@
 
         @foreach (ApplicationUser _Elem in ViewBag.Users)
         {
+            @* We can use card-footer *@
             <div class="card m-3 p-4" style="background: #292558;">
                 <h2 class="mb-0">@_Elem.UserName</h2>
                 <hr>
