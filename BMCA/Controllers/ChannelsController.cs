@@ -193,7 +193,7 @@ namespace BMCA.Controllers
 				{
 					if (_Bind.IsOwner)
 					{
-						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						if (_Bind.UserId != MyUserManager.GetUserId(User) && MyUserManager.GetUserId(User) != _UserId)
 						{
 							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
 						}
@@ -248,7 +248,14 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to remove a member from the chat. Please contact the dev team in order to resolve this issue." });
 			}
 
-			return Redirect("/Channels/Display/" + _ID);
+			if (_UserId == MyUserManager.GetUserId(User))
+			{
+				return Redirect("/Users/Show/" + MyUserManager.GetUserId(User));
+			}
+			else
+			{
+				return Redirect("/Channels/Display/" + _ID);
+			}
 		}
 
 		[Authorize(Roles = "User,Moderator,Admin")]

@@ -63,7 +63,9 @@
             @foreach (ApplicationUser _Member in ViewBag.AllMembers)
             {
                 <div style="display: grid; grid-template-columns: repeat(5, 1fr)">
-                    <p style="grid-column: 1">@_Member.UserName</p>
+                    <a href="/Users/Show/@_Member.Id" style="color: white">
+                        <p style="grid-column: 1">@_Member.UserName</p>
+                    </a>
                     <div style="grid-column: 2">
                         <form action="/Channels/RemoveMember/@Model.ID" method="post">
                             <input type="hidden" name="_UserId" value="@_Member.Id" />

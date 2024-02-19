@@ -14,18 +14,20 @@
 {
     <div style="grid-column: 1"></div>
     <div style="grid-column: 2; background-color: #353164; border-radius: 0.2rem">
-        <h4 style="text-align: right; margin: 1rem 0.5rem 0 0">@_UserName</h4>
+        <a href="/Users/Show/@Model.UserId">
+            <h4 style="text-align: right; margin: 1rem 0.5rem 0 0">@_UserName</h4>
+        </a>
         @if (Model.FilePath != null && Model.FileType != null)
         {
             @if (Model.FileType.Contains("image"))
             {
-                <div style="margin-right: 0.5rem">
+                <div style="margin-right: 0.5rem; text-align: right;">
                     <img width="300" height="225" src="@Model.FilePath" alt="Image not found" />
                 </div>
             }
             else if (Model.FileType.Contains("video"))
             {
-                <div style="margin-right: 0.5rem">
+                <div style="margin-right: 0.5rem; text-align: right;">
                     <video width="300" height="225" controls>
                         <source src="@Model.FilePath" type="@Model.FileType" />
                     </video>
@@ -51,7 +53,9 @@
 else
 {
     <div style="grid-column: 1; background-color: #353164; border-radius: 0.2rem">
-        <h4 style="text-align: left; margin: 1rem 0 0 0.5rem">@_UserName</h4>
+        <a href="/Users/Show/@Model.UserId">
+            <h4 style="text-align: left; margin: 1rem 0 0 0.5rem">@_UserName</h4>
+        </a>
         @if (Model.FilePath != null && Model.FileType != null)
         {
             @if (Model.FileType.Contains("image"))

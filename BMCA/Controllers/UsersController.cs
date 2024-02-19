@@ -78,7 +78,7 @@ namespace BMCA.Controllers
 			}
 		}
 
-		[Authorize(Roles = "User,Moderator,Admin")]
+		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		public IActionResult Delete(string _ID)
 		{
@@ -87,11 +87,6 @@ namespace BMCA.Controllers
 			if (_DeleteUser == null)
 			{
 				return View("Error", new ErrorViewModel { RequestId = "Delete attempt on non existing user!" });
-			}
-
-			if (_DeleteUser.Id != MyUserManager.GetUserId(User) && !User.IsInRole("Admin"))
-			{
-				return View("Error", new ErrorViewModel { RequestId = "Permission denied!" });
 			}
 
 			try
