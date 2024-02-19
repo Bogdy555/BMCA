@@ -1,0 +1,93 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Message
+
+@{
+    string _UserName = Model.User.UserName;
+    _UserName = _UserName.Split("@")[0];
+    _UserName = _UserName[0].ToString().ToUpper() + _UserName.Substring(1);
+}
+
+@if (Model.UserId == MyUserManager.GetUserId(User))
+{
+    <div style="grid-column: 1"></div>
+    <div style="grid-column: 2; background-color: #353164; border-radius: 0.2rem">
+        <h4 style="text-align: right; margin: 1rem 0.5rem 0 0">@_UserName</h4>
+        @if (Model.FilePath != null && Model.FileType != null)
+        {
+            @if (Model.FileType.Contains("image"))
+            {
+                <div style="margin-right: 0.5rem">
+                    <img width="300" height="225" src="@Model.FilePath" alt="Image not found" />
+                </div>
+            }
+            else if (Model.FileType.Contains("video"))
+            {
+                <div style="margin-right: 0.5rem">
+                    <video width="300" height="225" controls>
+                        <source src="@Model.FilePath" type="@Model.FileType" />
+                    </video>
+                </div>
+            }
+        }
+        @if (Model.Content != null)
+        {
+            <p style="text-align: right; margin: 0.2rem 0.5rem 0.1rem 0; font-size: 25px">@Model.Content</p>
+        }
+        <p class="text-muted" style="text-align: right; margin: 0 0.5rem 0.1rem 0">@Model.Date</p>
+        <hr / style="margin: 0">
+        <div class="d-flex" style="justify-content: right; margin: 0.3rem 0.5rem 0.5rem 0">
+            <form action="/Messages/Edit/@Model.ID" method="get">
+                <button class="btn BMCA_btn" style="font-size: 15px; margin-right: 0.5rem" type="submit">Edit</button>
+            </form>
+            <form action="/Messages/Delete/@Model.ID" method="post">
+                <button class="btn BMCA_btn_del" style="font-size: 15px" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div style="grid-column: 1; background-color: #353164; border-radius: 0.2rem">
+        <h4 style="text-align: left; margin: 1rem 0 0 0.5rem">@_UserName</h4>
+        @if (Model.FilePath != null && Model.FileType != null)
+        {
+            @if (Model.FileType.Contains("image"))
+            {
+                <div style="margin-left: 0.5rem">
+                    <img width="300" height="225" src="@Model.FilePath" alt="Image not found" />
+                </div>
+            }
+            else if (Model.FileType.Contains("video"))
+            {
+                <div style="margin-left: 0.5rem">
+                    <video width="300" height="225" controls>
+                        <source src="@Model.FilePath" type="@Model.FileType" />
+                    </video>
+                </div>
+            }
+        }
+        @if (Model.Content != null)
+        {
+            <p style="text-align: left; margin: 0.2rem 0 0.1rem 0.5rem; font-size: 25px">@Model.Content</p>
+        }
+        <p class="text-muted" style="text-align: left; margin: 0 0 0.1rem 0.5rem">@Model.Date</p>
+        @if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
+        {
+            <hr / style="margin: 0">
+            <div class="d-flex" style="justify-content: left; margin: 0.3rem 0 0.5rem 0.5rem">
+                <form action="/Messages/Edit/@Model.ID" method="get">
+                    <button class="btn BMCA_btn" style="font-size: 15px" type="submit">Edit</button>
+                </form>
+                <form action="/Messages/Delete/@Model.ID" method="post">
+                    <button class="btn BMCA_btn_del" style="font-size: 15px; margin-left: 0.5rem" type="submit">Delete</button>
+                </form>
+            </div>
+        }
+        <div style="grid-column: 2"></div>
+    </div>
+}
+
+

@@ -8,10 +8,25 @@
     ViewData["Title"] = "Add member to " + Model.Name;
 }
 
-<form action="/Channels/AddMember/@Model.ID" method="post">
-    <label>User Name</label>
-    <br />
-    <input type="text" name="_UserName" />
-    <br />
-    <button type="submit">Add</button>
-</form>
+<div class="mt-5 BMCA_sitecard" style="padding-bottom: calc(15px + (100vw - 700px) * (15 - 30) / (700 - 1000))">
+    <a class="bi bi-chevron-left BMCA_back" style="margin-top: 5px; margin-left: 5px" href="/Channels/Display/@Model.ID"></a>
+    <div class="mt-2" style="text-align:center">
+        <h1 style="margin:0 20px">@ViewData["Title"]</h1>
+    </div>
+
+    <hr />
+
+    <div style="text-align:center">
+        <form action="/Channels/AddMember/@Model.ID" method="post">
+            <label>User Name</label>
+            <br />
+            <input type="text" name="_UserName" />
+
+            <br />
+            <br />
+
+            <button class="btn BMCA_btn" style="font-size:20px;" type="submit">Add</button>
+        </form>
+    </div>
+</div>
+

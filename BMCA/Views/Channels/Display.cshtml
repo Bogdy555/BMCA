@@ -38,10 +38,10 @@
                 <h2 style="margin: 1rem">@Model.Name</h2>
                 <div class="d-flex">
                     <a class="btn BMCA_btn" style="font-size: 20px; margin: 1rem" href="/Channels/Edit/@Model.ID">Edit</a>
+                    <a class="btn BMCA_btn" style="font-size: 20px; margin: 1rem 1rem 1rem 0" href="/Channels/AddMember/@Model.ID">Add</a>
                     <form action="/Channels/Delete/@Model.ID" method="post">
                         <button class="btn BMCA_btn_del" style="font-size: 20px; margin: 1rem 1rem 1rem 0rem" type="submit">Delete</button>
                     </form>
-                    <a class="btn BMCA_btn" style="font-size: 20px; margin: 1rem" href="/Channels/AddMember/@Model.ID">Add</a>
                 </div>
             </div>
         }
@@ -58,17 +58,18 @@
             <p><strong>Description:</strong> <span>@Model.Description</span></p>
             <p><strong>Category:</strong> <span>@Model.Category.Name</span></p>
 
-            <h4 class="mt-4">Members of the chat</h>
+            <h4 class="mt-4">Members of the chat</h4>
             <hr />
             @foreach (ApplicationUser _Member in ViewBag.AllMembers)
             {
-                <div>
-                    <p>@_Member.UserName</p>
-                    <br />
-                    <form action="/Channels/RemoveMember/@Model.ID" method="post">
-                        <input type="hidden" name="_UserId" value="@_Member.Id" />
-                        <button type="submit">Kick</button>
-                    </form>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr)">
+                    <p style="grid-column: 1">@_Member.UserName</p>
+                    <div style="grid-column: 2">
+                        <form action="/Channels/RemoveMember/@Model.ID" method="post">
+                            <input type="hidden" name="_UserId" value="@_Member.Id" />
+                            <button class="btn BMCA_btn_del" style="font-size: 12px" type="submit">Kick</button>
+                        </form>
+                    </div>
                 </div>
             }
         </section>
