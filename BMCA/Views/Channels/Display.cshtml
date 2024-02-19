@@ -37,6 +37,7 @@
                     <form action="/Channels/Delete/@Model.ID" method="post">
                         <button class="btn BMCA_btn_del" style="font-size: 20px; margin: 1rem 1rem 1rem 0rem" type="submit">Delete</button>
                     </form>
+                    <a class="btn BMCA_btn" style="font-size: 20px; margin: 1rem" href="/Channels/AddMember/@Model.ID">Add</a>
                 </div>
             </div>
         }
@@ -59,6 +60,11 @@
             {
                 <div>
                     <p>@_Member.UserName</p>
+                    <br />
+                    <form action="/Channels/RemoveMember/@Model.ID" method="post">
+                        <input type="hidden" name="_UserId" value="@_Member.Id" />
+                        <button type="submit">Kick</button>
+                    </form>
                 </div>
             }
         </section>

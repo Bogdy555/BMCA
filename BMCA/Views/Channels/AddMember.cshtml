@@ -1,0 +1,17 @@
+﻿@using BMCA.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> MyUserManager
+
+@model Channel
+
+@{
+    ViewData["Title"] = "Add member to " + Model.Name;
+}
+
+<form action="/Channels/AddMember/@Model.ID" method="post">
+    <label>User Name</label>
+    <br />
+    <input type="text" name="_UserName" />
+    <br />
+    <button type="submit">Add</button>
+</form>

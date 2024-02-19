@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
 
 namespace BMCA.Controllers
 {
@@ -33,20 +34,23 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Could not find the channel!" });
 			}
 
-			bool _Found = false;
-
-			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			if (!User.IsInRole("Admin"))
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+				bool _Found = false;
+
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 				{
-					_Found = true;
-					break;
+					if (_Bind.UserId == MyUserManager.GetUserId(User))
+					{
+						_Found = true;
+						break;
+					}
 				}
-			}
 
-			if (!_Found)
-			{
-				return Redirect("/Users/Show/" + MyUserManager.GetUserId(User));
+				if (!_Found)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+				}
 			}
 
 			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
@@ -59,9 +63,9 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
-            {
-                ViewBag.UserChannels = MyDataBase.Channels;
+			if (_Search == null && User.IsInRole("Admin"))
+			{
+				ViewBag.UserChannels = MyDataBase.Channels;
 			}
 			else if (_Search == null)
 			{
@@ -92,20 +96,32 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Could not find the channel!" });
 			}
 
-			bool _Found = false;
-
-			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			if (!User.IsInRole("Admin"))
 			{
-				if (_Bind.UserId == MyUserManager.GetUserId(User) || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+				bool _Found = false;
+
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 				{
-					_Found = true;
-					ViewBag.Owner = _Bind.UserId;
+					if (_Bind.UserId == MyUserManager.GetUserId(User))
+					{
+						_Found = true;
+						break;
+					}
+				}
+
+				if (!_Found)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
 				}
 			}
 
-			if (!_Found)
+			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				return Redirect("/Users/Show/" + MyUserManager.GetUserId(User));
+				if (_Bind.IsOwner)
+				{
+					ViewBag.Owner = _Bind.UserId;
+					break;
+				}
 			}
 
 			List<BindChannelUser> _BindChannelUser = MyDataBase.BindChannelUserEntries
@@ -118,9 +134,9 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
-            {
-                ViewBag.UserChannels = MyDataBase.Channels;
+			if (_Search == null && User.IsInRole("Admin"))
+			{
+				ViewBag.UserChannels = MyDataBase.Channels;
 			}
 			else if (_Search == null)
 			{
@@ -157,40 +173,165 @@ namespace BMCA.Controllers
 
 		[Authorize(Roles = "User,Moderator,Admin")]
 		[HttpPost]
-		public IActionResult RemoveMemer(int _ID, int? _UserId)
+		public IActionResult RemoveMember(int _ID, string? _UserId)
 		{
-			// TO DO
-
 			if (_UserId == null)
 			{
-				return Redirect("/Channels/Display/" + _ID);
+				return View("Error", new ErrorViewModel { RequestId = "No user ID supplied for kick operation!" });
 			}
 
 			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ID).First();
 
 			if (_Channel == null || _Channel.BindsChannelUser == null)
 			{
-				return View("Error", new ErrorViewModel { RequestId = "Can't remove a member from an unexisting channel!" });
+				return View("Error", new ErrorViewModel { RequestId = "No channel found for the ID!" });
 			}
+
+			if (!User.IsInRole("Moderator") && !User.IsInRole("Admin"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+
+						if (_Bind.UserId == _UserId)
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Did you want to delete the chat???" });
+						}
+					}
+				}
+			}
+			else
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId == _UserId)
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Did you want to delete the chat???" });
+						}
+					}
+				}
+			}
+
+			bool _Found = false;
 
 			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 			{
-				if (_Bind.IsOwner)
+				if (_Bind.UserId == _UserId)
 				{
-					if (_Bind.UserId != MyUserManager.GetUserId(User))
-					{
-						return Redirect("/Channels/Display/" + _ID);
-					}
-
+					_Found = true;
 					break;
 				}
 			}
 
-			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			if (!_Found)
 			{
-				if (_Bind.UserId != MyUserManager.GetUserId(User))
+				return View("Error", new ErrorViewModel { RequestId = "No such user in this chat dude..." });
+			}
+
+			try
+			{
+				BindChannelUser? _OriginalBind = MyDataBase.BindChannelUserEntries.Where(m => m.UserId == _UserId && m.ChannelId == _ID).First();
+
+				MyDataBase.BindChannelUserEntries.Remove(_OriginalBind);
+
+				MyDataBase.SaveChanges();
+			}
+			catch
+			{
+				return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to remove a member from the chat. Please contact the dev team in order to resolve this issue." });
+			}
+
+			return Redirect("/Channels/Display/" + _ID);
+		}
+
+		[Authorize(Roles = "User,Moderator,Admin")]
+		public IActionResult AddMember(int _ID)
+		{
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ID).First();
+
+			if (_Channel == null || _Channel.BindsChannelUser == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "This channel does not exist!" });
+			}
+
+			if (!User.IsInRole("Admin"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
 				{
-					return Redirect("/Channels/Display/" + _ID);
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+
+						break;
+					}
+				}
+			}
+
+			return View(_Channel);
+		}
+
+		[Authorize(Roles = "User,Moderator,Admin")]
+		[HttpPost]
+		public IActionResult AddMember(int _ID, string? _UserName)
+		{
+			if (_UserName == null)
+			{
+				return View();
+			}
+
+			Channel? _Channel = MyDataBase.Channels.Include("BindsChannelUser").Where(m => m.ID == _ID).First();
+
+			if (_Channel == null || _Channel.BindsChannelUser == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "No such channel out there..." });
+			}
+
+			if (!User.IsInRole("Admin"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+
+						break;
+					}
+				}
+			}
+
+			ApplicationUser? _AddedUser = MyDataBase.AppUsers.Include("BindsChannelUser").Where(m => m.UserName == _UserName).First();
+
+			if (_AddedUser == null || _AddedUser.BindsChannelUser == null)
+			{
+				return View("Error", new ErrorViewModel { RequestId = "No user with that username!" });
+			}
+
+			if (!_AddedUser.BindsChannelUser.Contains(new BindChannelUser { UserId = _AddedUser.Id, ChannelId = _ID }))
+			{
+				try
+				{
+					BindChannelUser _NewBind = new BindChannelUser { UserId = _AddedUser.Id, ChannelId = _ID };
+
+					MyDataBase.BindChannelUserEntries.Add(_NewBind);
+
+					MyDataBase.SaveChanges();
+				}
+				catch
+				{
+					return View("Error", new ErrorViewModel { RequestId = "An error occured while trying to add a new member. Please contact the dev team in order to resolve this issue." });
 				}
 			}
 
@@ -244,16 +385,35 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing channel!" });
 			}
 
-			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			if (User.IsInRole("Moderator"))
 			{
-                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                {
-                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
-                    {
-                        return Redirect("/Channels/Show/" + _ID);
-					}
+				bool _Found = false;
 
-					break;
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.UserId == MyUserManager.GetUserId(User))
+					{
+						_Found = true;
+						break;
+					}
+				}
+
+				if (!_Found)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+				}
+			}
+			else if (User.IsInRole("User"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+					}
 				}
 			}
 
@@ -275,16 +435,35 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Edit attempt on non existing channel!" });
 			}
 
-			foreach (BindChannelUser _Bind in _OriginalChannel.BindsChannelUser)
+			if (User.IsInRole("Moderator"))
 			{
-                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                {
-                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
-                    {
-                        return Redirect("/Channels/Show/" + _ID);
-					}
+				bool _Found = false;
 
-					break;
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.UserId == MyUserManager.GetUserId(User))
+					{
+						_Found = true;
+						break;
+					}
+				}
+
+				if (!_Found)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+				}
+			}
+			else if (User.IsInRole("User"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+					}
 				}
 			}
 
@@ -322,16 +501,35 @@ namespace BMCA.Controllers
 				return View("Error", new ErrorViewModel { RequestId = "Delete attempt on non existing channel!" });
 			}
 
-			foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+			if (User.IsInRole("Moderator"))
 			{
-                if (_Bind.IsOwner || User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                {
-                    if (_Bind.UserId != MyUserManager.GetUserId(User) && !(User.IsInRole("Admin") || User.IsInRole("Moderator")))
-                    {
-                        return Redirect("/Channels/Show/" + _ID);
-					}
+				bool _Found = false;
 
-					break;
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.UserId == MyUserManager.GetUserId(User))
+					{
+						_Found = true;
+						break;
+					}
+				}
+
+				if (!_Found)
+				{
+					return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+				}
+			}
+			else if (User.IsInRole("User"))
+			{
+				foreach (BindChannelUser _Bind in _Channel.BindsChannelUser)
+				{
+					if (_Bind.IsOwner)
+					{
+						if (_Bind.UserId != MyUserManager.GetUserId(User))
+						{
+							return View("Error", new ErrorViewModel { RequestId = "Access denied!" });
+						}
+					}
 				}
 			}
 

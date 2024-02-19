@@ -50,7 +50,7 @@ namespace BMCA.Controllers
 				_ChannelIds.Add(_Bind.ChannelId);
 			}
 
-			if (_Search == null && (User.IsInRole("Admin") || User.IsInRole("Moderator")))
+			if (_Search == null && User.IsInRole("Admin"))
             {
                 ViewBag.UserChannels = MyDataBase.Channels;
 			}
