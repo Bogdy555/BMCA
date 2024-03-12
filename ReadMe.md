@@ -9,3 +9,5 @@ Moderators play a crucial role in maintaining order by deleting inappropriate me
 A standout feature of our application is the robust search engine, enabling users to quickly locate channels they have access to. This functionality streamlines the user experience, ensuring efficient navigation within the expansive network of channels.
 
 In summary, our chat web application offers a rich and customizable communication experience, catering to the unique needs and preferences of each user. Whether you're a channel creator, moderator, admin, or user, our platform provides the tools and features necessary to foster engaging and organized discussions.
+
+![Showcase](./ReadMe%20Resources/BMCA%20SS.png)
